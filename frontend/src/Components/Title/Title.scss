@@ -1,0 +1,67 @@
+.title {
+    .title-text {
+        text-align: center;
+        padding: 90px 0 25px;
+        width: 750px;
+        margin: 0 auto;
+
+        h1 {
+            font-size: 80px;
+            padding-bottom: 28px;
+            letter-spacing: 0.2px;
+        }
+
+        p {
+            font-size: 16px;
+            margin: 0 120px;
+            letter-spacing: 0.2px;
+            line-height: 26px;
+            font-weight: 200;
+        }
+    }
+
+    .title-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 35px;
+        padding-top: 35px;
+
+        button {
+            all: unset;
+            cursor: pointer;
+        }
+
+        .try-free {
+            padding: 20px 40px;
+            background-color: #4452fe;
+        }
+
+        .learn-more {
+            padding: 20px 40px;
+            border: 1px solid #fff;
+        }
+
+        .try-free,
+        .learn-more {
+            &:hover {
+                background-color: #fff;
+                color: #000;
+            }
+        }
+    }
+}
+.screens {
+    display: flex;
+    justify-content: center;
+    padding: 35px 0 100px;
+    position: relative;
+    overflow: hidden;
+
+    span {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgb(0, 0, 0)); /* Прозрачный вверху, черный внизу */
+        opacity: 1;
+    }
+}

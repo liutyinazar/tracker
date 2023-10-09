@@ -1,0 +1,62 @@
+.auth {
+    text-align: center;
+    padding: 90px 0 25px;
+
+    h1 {
+        font-size: 80px;
+        letter-spacing: 0.2px;
+        text-align: center;
+        padding-bottom: 72px;
+    }
+
+    .auth_wrapper {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        input,
+        button {
+            all: unset;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            gap: 70px;
+            width: 600px;
+
+            button {
+                padding: 20px 40px;
+                border: 1px solid #fff;
+                cursor: pointer;
+                margin: 0 180px;
+
+                &:hover {
+                    background-color: #fff;
+                    color: #000;
+                    border: 1px solid #000;
+                    cursor: pointer;
+                }
+            }
+
+            input {
+                border-bottom: 1px solid #fff;
+                padding: 10px;
+                margin: 0 80px;
+            }
+        }
+    }
+
+    .have-acc {
+        display: flex;
+        justify-content: center;
+        gap: 4px;
+        padding-top: 50px;
+        font-size: 14px;
+        letter-spacing: 1.2px;
+
+        a {
+            color: #4452fe;
+        }
+    }
+}

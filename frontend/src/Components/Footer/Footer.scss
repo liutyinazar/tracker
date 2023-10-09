@@ -1,0 +1,34 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 110px 94px;
+    align-items: center;
+    .footer-menu {
+        display: flex;
+        justify-content: space-between;
+        gap: 75px;
+
+        .footer-list {
+            h1 {
+                font-size: 20px;
+                line-height: 30px;
+                padding-bottom: 40px;
+            }
+
+            li {
+                padding-bottom: 20px;
+            }
+        }
+    }
+
+    .footer-contact {
+        .footer-phone,
+        .footer-social,
+        .footer-address {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding-bottom: 30px;
+        }
+    }
+}
