@@ -3,6 +3,13 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
+class Type(models.Model):
+    type = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.type
+
+
 class Team(models.Model):
     identifier = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=80)
@@ -31,6 +38,9 @@ class User(AbstractUser):
         Permission, related_name="custom_user_permissions"
     )
 
+    def __str__(self):
+        return self.username
+
 
 class Task(models.Model):
     title = models.CharField(max_length=128)
@@ -40,5 +50,19 @@ class Task(models.Model):
     date_finish = models.DateTimeField()
     is_completed = models.BooleanField(default=False)
     created_by = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, default=1
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        default=1,
+        related_name="who_create_task",
     )
+    task_type = models.ForeignKey(Type, on_delete=models.SET_NULL, null=True)
+    by_team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True)
+    for_users = models.ManyToManyField(
+        User,
+        blank=True,
+        related_name="for_users",
+    )
+
+    def __str__(self):
+        return self.title
