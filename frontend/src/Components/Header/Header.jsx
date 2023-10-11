@@ -7,16 +7,20 @@ const Header = () => {
     <div className="container">
       <header className="header">
         <div className="logo">
-          <a href="/">
-            <img src={logo} alt="logo" />
-          </a>
+          <Link to="/" className="auth_login">
+            <a href="/">
+              <img src={logo} alt="logo" />
+            </a>
+          </Link>
         </div>
         <div className="menu">
           <ul className="menu-list">
             <li className="menu-item">
-              <a href="/" className="menu-link">
-                Home
-              </a>
+              <Link to="/" className="auth_login">
+                <a href="/" className="menu-link">
+                  Home
+                </a>
+              </Link>
             </li>
             <li className="menu-item">
               <Link to="/workplace" className="auth_login">
@@ -33,9 +37,11 @@ const Header = () => {
               </Link>
             </li>
             <li className="menu-item">
-              <a href="/" className="menu-link">
-                Contact
-              </a>
+              <Link to="/contact" className="menu-link">
+                <a href="/" className="menu-link">
+                  Contact
+                </a>
+              </Link>
             </li>
           </ul>
         </div>

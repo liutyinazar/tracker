@@ -1,6 +1,7 @@
 import "./Auth.scss";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
   // Створюємо стейт для збереження введених даних користувача
@@ -18,10 +19,23 @@ const Login = () => {
     });
   };
 
-  // Обробник відправки форми
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Тут виконати логіку обробки введених даних (відправити їх на сервер для перевірки)
+
+    const credentials = {
+      username: formData.username,
+      password: formData.password,
+    };
+
+    axios
+      .post("http://127.0.0.1:8000/login/", credentials)
+      .then((response) => {
+        console.log("Відповідь сервера:", response.data);
+      })
+      .catch((error) => {
+        console.error("Помилка:", error);
+      });
+
     console.log("Вхідні дані:", formData);
   };
   return (

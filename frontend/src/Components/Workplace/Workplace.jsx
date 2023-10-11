@@ -28,19 +28,51 @@ const Workplace = () => {
   return (
     <div className="container">
       <div className="workplace">
-        <div className="teams">
-          <h1>TEAMS</h1>
-          <ul>
-            {teams.map((team) => (
-              <li key={team.id}>
-                {team.image && <img src={team.image} alt={team.name} />}
-                <h2>{team.name}</h2>
-              </li>
-            ))}
-          </ul>
+        <div className="workplace-title">
+          <h1>Your Workplace</h1>
         </div>
-        <div className="tasks">
-          <h1>TASKS</h1>
+        <div className="workplace-wrapper">
+          <div className="workplace-type">
+            <h1>TEAMS</h1>
+            <ul>
+              {teams.map((team) => (
+                <li key={team.id}>
+                  {team.image && <img src={team.image} alt={team.name} />}
+                  <h2>{team.name}</h2>
+                </li>
+              ))}
+            </ul>
+            <h1>PERSONAL</h1>
+            <ul>
+              {teams.map((team) => (
+                <li key={team.id}>
+                  {team.image && <img src={team.image} alt={team.name} />}
+                  <h2>{team.name}</h2>
+                </li>
+              ))}
+            </ul>
+            <h1>TEAMS</h1>
+            <ul>
+              {teams.map((team) => (
+                <li key={team.id}>
+                  {team.image && <img src={team.image} alt={team.name} />}
+                  <h2>{team.name}</h2>
+                </li>
+              ))}
+            </ul>
+            <h1>PERSONAL</h1>
+            <ul>
+              {teams.map((team) => (
+                <li key={team.id}>
+                  {team.image && <img src={team.image} alt={team.name} />}
+                  <h2>{team.name}</h2>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="tasks">
+            <h1>TASKS</h1>
+          </div>
         </div>
       </div>
     </div>
