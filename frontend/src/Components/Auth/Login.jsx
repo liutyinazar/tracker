@@ -1,9 +1,11 @@
 import "./Auth.scss";
+import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   // Створюємо стейт для збереження введених даних користувача
   const [formData, setFormData] = useState({
     username: "",
@@ -28,15 +30,16 @@ const Login = () => {
     };
 
     axios
-      .post("http://127.0.0.1:8000/login/", credentials)
+      .post("http://127.0.0.1:8000/auth/token/login/", credentials)
       .then((response) => {
-        console.log("Відповідь сервера:", response.data);
+        const token = response.data.auth_token;
+        localStorage.setItem("auth_token", token);
+        navigate("/profile");
+        window.location.reload();
       })
       .catch((error) => {
         console.error("Помилка:", error);
       });
-
-    console.log("Вхідні дані:", formData);
   };
   return (
     <div className="container">

@@ -1,4 +1,5 @@
 import "./Auth.scss";
+import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -20,7 +21,19 @@ const Sign = () => {
   // Обробник відправки форми
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Тут виконати логіку обробки введених даних (відправити їх на сервер для перевірки)
+    const credentials = {
+      username: formData.username,
+      password: formData.password,
+    };
+
+    axios
+      .post("http://127.0.0.1:8000/sign-in/", credentials)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error("Помилка:", error);
+      });
     console.log("Вхідні дані:", formData);
   };
   return (

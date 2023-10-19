@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -17,6 +17,8 @@ from api.views import (
     UserDestroy,
     Login,
     SignUp,
+    Logout,
+    UserDetail,
 )
 
 urlpatterns = [
@@ -33,6 +35,11 @@ urlpatterns = [
     path("api/v1/types/", TypeList.as_view()),
     path("sign-in/", SignUp.as_view(), name="register"),
     path("login/", Login.as_view(), name="login"),
+    path("logout/", Logout.as_view(), name="logout"),
+    path("api/v1/user/<int:pk>/", UserDetail.as_view(), name="user-details"),
+    
+    path("auth/", include("djoser.urls")),
+    path("auth/", include("djoser.urls.authtoken")),
 ]
 
 if settings.DEBUG:
