@@ -1,35 +1,39 @@
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 39px 21px 30px;
+.header_border {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
-    .logo {
-        cursor: pointer;
-    }
-
-    .menu {
-        .menu-list {
-            display: flex;
-            justify-content: space-between;
-            gap: 45px;
-        }
-    }
-
-    .auth_btn {
+    .header {
         display: flex;
-        gap: 20px;
-        
-        .auth_login {
-            all: unset;
-            padding: 13.5px 46px;
-            border: 1px solid #fff;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 39px 21px 30px;
 
-            &:hover {
-                background-color: #fff;
-                color: #000;
-                border: 1px solid #000;
-                cursor: pointer;
+        .logo {
+            cursor: pointer;
+        }
+
+        .menu {
+            .menu-list {
+                display: flex;
+                justify-content: space-between;
+                gap: 45px;
+            }
+        }
+
+        .auth_btn {
+            display: flex;
+            gap: 20px;
+
+            .auth_login {
+                all: unset;
+                padding: 13.5px 46px;
+                border: 1px solid #fff;
+
+                &:hover {
+                    background-color: #fff;
+                    color: #000;
+                    border: 1px solid #000;
+                    cursor: pointer;
+                }
             }
         }
     }

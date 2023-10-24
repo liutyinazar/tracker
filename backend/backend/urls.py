@@ -15,9 +15,6 @@ from api.views import (
     TypeList,
     UserUpdate,
     UserDestroy,
-    # Login,
-    # SignUp,
-    # Logout,
     UserDetail,
 )
 
@@ -34,9 +31,6 @@ urlpatterns = [
     path("api/v1/teams/delete/<int:pk>", TeamDestroy.as_view()),
     path("api/v1/types/", TypeList.as_view()),
     path("api/v1/users/detail/<int:pk>/", UserDetail.as_view(), name="user-details"),
-    # path("sign-in/", SignUp.as_view(), name="register"),
-    # path("login/", Login.as_view(), name="login"),
-    # path("logout/", Logout.as_view(), name="logout"),
     path("auth/", include("djoser.urls")),
     re_path(r"^auth/", include("djoser.urls.authtoken")),
 ]

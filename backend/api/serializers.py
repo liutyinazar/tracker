@@ -20,13 +20,16 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             "id",
-            "username",
             "email",
             "first_name",
             "last_name",
+            "teams",
+        )
+
+        read_only_fields = (
+            "username",
             "photo",
             "password",
-            "teams",
         )
 
     def validate(self, attrs):
@@ -45,6 +48,20 @@ class UserSerializer(serializers.ModelSerializer):
             )
 
         return attrs
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "photo",
+            "username",
+            "password",
+        )
 
 
 class TypeSerializer(serializers.ModelSerializer):

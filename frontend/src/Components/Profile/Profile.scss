@@ -10,8 +10,85 @@
             letter-spacing: 0.2px;
         }
     }
-
+}
+.profile_wrapper {
     .profile_data {
-        
+        display: flex;
+        justify-content: space-between;
+        text-align: left;
+        .profile_image {
+            .edit_profile {
+                padding: 18px 0;
+                display: flex;
+                justify-content: center;
+                button {
+                    all: unset;
+                    padding: 10px 40px;
+                    border: 1px solid #fff;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: #fff;
+                        color: #000;
+                    }
+                }
+            }
+        }
+
+        .profile_text {
+            font-size: 24px;
+
+            p {
+                font-size: 18px;
+                opacity: 0.7;
+            }
+        }
+    }
+
+    img {
+        width: 300px;
+        height: 300px;
+        object-fit: cover;
+        object-position: center center;
+        border-radius: 50%;
+        margin-bottom: 2vh;
+    }
+
+    .loading {
+        text-align: center;
+    }
+}
+
+.edit_profile_form {
+    padding: 90px 0 0;
+    justify-content: center;
+
+    gap: 70px;
+
+
+    input {
+        all: unset;
+        border-bottom: 1px solid #fff;
+        padding: 10px;
+        margin: 0 80px;
+
+        /* Стилі для поля вводу з автозаповненням */
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus,
+        &:-webkit-autofill:active {
+            transition: all 5000s ease-in-out 0s;
+        }
+    }
+    button {
+        all: unset;
+        padding: 10px 40px;
+        border: 1px solid #fff;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #fff;
+            color: #000;
+        }
     }
 }
