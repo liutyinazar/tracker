@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState("");
   // Створюємо стейт для збереження введених даних користувача
   const [formData, setFormData] = useState({
     username: "",
@@ -38,7 +39,11 @@ const Login = () => {
         window.location.reload();
       })
       .catch((error) => {
-        console.error("Помилка:", error);
+        if (error.response && error.response.status === 400) {
+          setError("Неправильне ім'я користувача або пароль"); // Установка сообщения об ошибке
+        } else {
+          console.error("Помилка:", error);
+        }
       });
   };
   return (
@@ -64,8 +69,9 @@ const Login = () => {
             <button type="submit">Login</button>
           </form>
         </div>
+        {error && <p className="error">{error}</p>}
         <div className="have-acc">
-          <p>If you have account -</p>
+          <p>Don't have an account? -</p>
           <Link to="/sign-up" className="auth_login">
             <a href="/" className="have-acc-btn">
               Sign Up

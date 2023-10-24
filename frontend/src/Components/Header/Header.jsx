@@ -21,9 +21,12 @@ const Header = () => {
     const token = localStorage.getItem("auth_token");
 
     if (token) {
+      const headers = {
+        Authorization: `Token ${token}`,
+      };
       // Відправляємо POST-запит на виход з передачею токену
       axios
-        .post("http://127.0.0.1:8000/logout/", { token })
+        .post("http://127.0.0.1:8000/auth/token/logout/", null, { headers })
         .then((response) => {
           // Видалення токена з куків
           localStorage.removeItem("auth_token");

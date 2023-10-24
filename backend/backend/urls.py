@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -15,9 +15,9 @@ from api.views import (
     TypeList,
     UserUpdate,
     UserDestroy,
-    Login,
-    SignUp,
-    Logout,
+    # Login,
+    # SignUp,
+    # Logout,
     UserDetail,
 )
 
@@ -33,13 +33,12 @@ urlpatterns = [
     path("api/v1/teams/<int:pk>", TeamUpdate.as_view()),
     path("api/v1/teams/delete/<int:pk>", TeamDestroy.as_view()),
     path("api/v1/types/", TypeList.as_view()),
-    path("sign-in/", SignUp.as_view(), name="register"),
-    path("login/", Login.as_view(), name="login"),
-    path("logout/", Logout.as_view(), name="logout"),
-    path("api/v1/user/<int:pk>/", UserDetail.as_view(), name="user-details"),
-    
+    path("api/v1/users/detail/<int:pk>/", UserDetail.as_view(), name="user-details"),
+    # path("sign-in/", SignUp.as_view(), name="register"),
+    # path("login/", Login.as_view(), name="login"),
+    # path("logout/", Logout.as_view(), name="logout"),
     path("auth/", include("djoser.urls")),
-    path("auth/", include("djoser.urls.authtoken")),
+    re_path(r"^auth/", include("djoser.urls.authtoken")),
 ]
 
 if settings.DEBUG:

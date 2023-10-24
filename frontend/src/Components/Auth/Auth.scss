@@ -2,6 +2,17 @@
     text-align: center;
     padding: 90px 0 25px;
 
+    .error {
+        display: flex;
+        justify-content: center;
+        margin: auto auto;
+        color: red;
+        font-size: 14px;
+        letter-spacing: 1.2px;
+        padding: 50px 20% 0;
+        line-height: 1.5;
+    }
+
     h1 {
         font-size: 80px;
         letter-spacing: 0.2px;
@@ -43,6 +54,14 @@
                 border-bottom: 1px solid #fff;
                 padding: 10px;
                 margin: 0 80px;
+
+                /* Стилі для поля вводу з автозаповненням */
+                &:-webkit-autofill,
+                &:-webkit-autofill:hover,
+                &:-webkit-autofill:focus,
+                &:-webkit-autofill:active {
+                    transition: all 5000s ease-in-out 0s;
+                }
             }
         }
     }

@@ -1,8 +1,21 @@
 from rest_framework import serializers
 from .models import Task, User, Team, Type
+import re
+
+
+def is_valid_email(email):
+    return re.match(r"^[\w\.-]+@[\w\.-]+$", email)
+
+
+class TeamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = ("id", "identifier", "name", "image", "users")
 
 
 class UserSerializer(serializers.ModelSerializer):
+    teams = TeamSerializer(many=True, read_only=True, source="team_set")
+
     class Meta:
         model = User
         fields = (
@@ -13,13 +26,25 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "photo",
             "password",
+            "teams",
         )
 
+    def validate(self, attrs):
+        # Додайте логіку перевірки, наприклад, перевірку складності пароля або валідацію електронної пошти
+        if not is_valid_email(attrs["email"]):
+            raise serializers.ValidationError({"email": "Невірна пошта"})
 
-class TeamSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Team
-        fields = ("id", "identifier", "name", "image", "users")
+        if len(attrs["password"]) < 8:
+            raise serializers.ValidationError({"password": "Пароль занадто простий"})
+
+        username = attrs["username"]
+        # Перевірка, чи користувач з таким username вже існує
+        if User.objects.filter(username=username).exists():
+            raise serializers.ValidationError(
+                {"username": "Користувач з таким іменем вже існує"}
+            )
+
+        return attrs
 
 
 class TypeSerializer(serializers.ModelSerializer):

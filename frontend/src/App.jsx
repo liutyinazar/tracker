@@ -10,6 +10,8 @@ import About from "./Components/About/About";
 import Contact from "./Components/Contact/Contact";
 import Profile from "./Components/Profile/Profile";
 
+import PrivateRouter from "./utils/router/privateRouter";
+
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 const App = () => {
@@ -17,13 +19,15 @@ const App = () => {
     <Router>
       <Header />
       <Routes>
+        <Route element={<PrivateRouter />}>
+          <Route path="/profile" element={<Profile />} />
+        </Route>
         <Route path="/" element={<Title />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/sign-up" element={<Sign />} />
         <Route path="/workplace" element={<Workplace />} />
         <Route path="/about" element={<About />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/sign-up" element={<Sign />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/profile" element={<Profile />} />
       </Routes>
       <Footer />
     </Router>

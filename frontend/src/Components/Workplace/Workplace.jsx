@@ -12,7 +12,7 @@ const Workplace = () => {
 
   const getTeams = () => {
     axios
-      .get("http://127.0.0.1:8000/api/v1/teams/?format=json")
+      .get("http://127.0.0.1:8000/api/v1/teams/")
       .then((response) => {
         // Оновлюємо стан "teams" з отриманими даними з сервера
         setTeams(response.data);

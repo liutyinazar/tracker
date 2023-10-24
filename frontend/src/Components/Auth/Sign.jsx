@@ -2,12 +2,23 @@ import "./Auth.scss";
 import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Sign = () => {
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    email: "",
   });
+  const token = localStorage.getItem("auth_token");
+
+  if (token) {
+    alert("Ви вже ввійшли в свій аккаунт!");
+    navigate("/");
+    return null; // Завершуємо компонент, не відображаючи решту форми
+  }
 
   // Обробник зміни значень полів вводу
   const handleInputChange = (e) => {
@@ -24,15 +35,26 @@ const Sign = () => {
     const credentials = {
       username: formData.username,
       password: formData.password,
+      email: formData.email,
     };
 
     axios
-      .post("http://127.0.0.1:8000/sign-in/", credentials)
+      .post("http://127.0.0.1:8000/auth/users/", credentials)
       .then((response) => {
-        console.log(response);
+        setError("Ви успішног створили аккаунт");
+        navigate("/login");
       })
       .catch((error) => {
-        console.error("Помилка:", error);
+        if (error.response && error.response.status === 400) {
+          const errorMessage =
+            error.response.data.email ||
+            error.response.data.password ||
+            error.response.data.username ||
+            "Помилка при реєстрації";
+          setError(errorMessage);
+        } else {
+          console.error("Помилка:", error);
+        }
       });
     console.log("Вхідні дані:", formData);
   };
@@ -50,6 +72,13 @@ const Sign = () => {
               onChange={handleInputChange}
             />
             <input
+              type="text"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+            <input
               type="password"
               name="password"
               placeholder="Password"
@@ -59,11 +88,12 @@ const Sign = () => {
             <button type="submit">Sign Up</button>
           </form>
         </div>
+        {error && <p className="error">{error}</p>}
         <div className="have-acc">
           <p>If you have account -</p>
-          <Link to="/sign-up" className="auth_login">
+          <Link to="/login" className="auth_login">
             <a href="/" className="have-acc-btn">
-              Sign Up
+              Login
             </a>
           </Link>
         </div>
