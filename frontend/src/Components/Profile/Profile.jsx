@@ -1,10 +1,11 @@
+import "./Profile.scss";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./Profile.scss";
+import Cookies from 'js-cookie';
 import loading from "../../assets/gif/loading.gif";
 
 const Profile = () => {
-  const TOKEN = localStorage.getItem("auth_token");
+  const TOKEN = Cookies.get('auth_token')
   const [userData, setUserData] = useState(null);
   const [editProfile, setEditProfile] = useState(true);
   // const navigate = useNavigate();
@@ -62,19 +63,22 @@ const Profile = () => {
   };
 
   const editProfileSend = () => {
-    const requestData = {};
+    const requestData = {
+      ...(formData.email && { email: formData.email }),
+      ...(formData.first_name && { first_name: formData.first_name }),
+      ...(formData.last_name && { last_name: formData.last_name }),
+    };
 
-    // Перевірте, які поля були введені користувачем
-    if (formData.email) {
-      requestData.email = formData.email;
-    }
-
-    if (formData.first_name) {
-      requestData.first_name = formData.first_name;
-    }
-
-    if (formData.last_name) {
-      requestData.last_name = formData.last_name;
+    if (Object.keys(requestData).length > 0) {
+      axios
+        .patch(`http://127.0.0.1:8000/api/v1/users/${userData.id}`, requestData)
+        .then((response) => {
+          setEditProfile(true);
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("Ошибка при обновлении данных:", error);
+        });
     }
 
     // Перевірте, чи є дані для відправлення
@@ -118,17 +122,6 @@ const Profile = () => {
                       </button>
                     </div>
                   </div>
-                  {/* <div className="profile_teams">
-                <p>Teams:</p>
-                <ul>
-                  {userData.teams.map((team) => (
-                    <li key={team.id}>
-                      {team.name}
-                      <img src={team.image} alt="team" />
-                    </li>
-                  ))}
-                </ul>
-              </div> */}
                 </div>
               </>
             ) : (
@@ -142,7 +135,7 @@ const Profile = () => {
         </>
       ) : (
         <form onSubmit={handleSubmit} className="edit_profile_form">
-          <div>
+          <div className="form-group">
             <label>Email address:</label>
             <input
               type="email"
@@ -151,7 +144,7 @@ const Profile = () => {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="form-group">
             <label>First name:</label>
             <input
               type="text"
@@ -160,7 +153,7 @@ const Profile = () => {
               onChange={handleChange}
             />
           </div>
-          <div>
+          <div className="form-group">
             <label>Last name:</label>
             <input
               type="text"
@@ -169,12 +162,15 @@ const Profile = () => {
               onChange={handleChange}
             />
           </div>
-          <button type="submit" onSubmit={editProfileSend}>
-            Save changes
-          </button>
-          <p type="onClick" onClick={back}>
-            Nothing edit
-          </p>
+          <div className="edit_btn">
+            <button type="submit" onSubmit={editProfileSend}>
+              Save changes
+            </button>
+            <h1>or</h1>
+            <p type="onClick" onClick={back}>
+              Go back
+            </p>
+          </div>
         </form>
       )}
     </div>

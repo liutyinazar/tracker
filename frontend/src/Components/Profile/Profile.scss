@@ -26,6 +26,8 @@
                     padding: 10px 40px;
                     border: 1px solid #fff;
                     cursor: pointer;
+                    width: 100%;
+                    text-align: center;
 
                     &:hover {
                         background-color: #fff;
@@ -61,16 +63,23 @@
 
 .edit_profile_form {
     padding: 90px 0 0;
-    justify-content: center;
 
-    gap: 70px;
-
+    .form-group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+        padding-bottom: 20px;
+        label {
+            flex: 0.15;
+        }
+    }
 
     input {
         all: unset;
         border-bottom: 1px solid #fff;
         padding: 10px;
-        margin: 0 80px;
+        // margin: 0 80px;
 
         /* Стилі для поля вводу з автозаповненням */
         &:-webkit-autofill,
@@ -80,15 +89,29 @@
             transition: all 5000s ease-in-out 0s;
         }
     }
-    button {
-        all: unset;
-        padding: 10px 40px;
-        border: 1px solid #fff;
-        cursor: pointer;
+    .edit_btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+        
+        button {
+            all: unset;
+            padding: 10px 40px;
+            border: 1px solid #fff;
+            cursor: pointer;
+            margin: 20px 0;
 
-        &:hover {
-            background-color: #fff;
-            color: #000;
+            &:hover {
+                background-color: #fff;
+                color: #000;
+            }
+        }
+
+        p {
+            cursor: pointer;
+            color: #4452fe;
         }
     }
 }

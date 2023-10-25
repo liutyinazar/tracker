@@ -72,6 +72,7 @@ class UserDetail(generics.ListAPIView):
         return queryset
 
 
+
 class TeamList(generics.ListAPIView):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer

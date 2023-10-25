@@ -2,13 +2,14 @@ import "./Header.scss";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import logo from "../../assets/image/logo.png";
+import Cookies from 'js-cookie';
 import React, { useEffect, useState } from "react";
 
 const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("auth_token");
+    const token = Cookies.get('auth_token')
 
     if (token) {
       setIsAuthenticated(true);
@@ -18,7 +19,7 @@ const Header = () => {
   }, []);
 
   const handleLogout = () => {
-    const token = localStorage.getItem("auth_token");
+    const token = Cookies.get('auth_token')
 
     if (token) {
       const headers = {
@@ -29,7 +30,8 @@ const Header = () => {
         .post("http://127.0.0.1:8000/auth/token/logout/", null, { headers })
         .then((response) => {
           // Видалення токена з куків
-          localStorage.removeItem("auth_token");
+
+          Cookies.remove('auth_token');
           setIsAuthenticated(false);
         })
         .catch((error) => {

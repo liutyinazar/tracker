@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 const Sign = () => {
   const [error, setError] = useState("");
@@ -12,7 +13,7 @@ const Sign = () => {
     password: "",
     email: "",
   });
-  const token = localStorage.getItem("auth_token");
+  const token = Cookies.get('auth_token')
 
   if (token) {
     alert("Ви вже ввійшли в свій аккаунт!");

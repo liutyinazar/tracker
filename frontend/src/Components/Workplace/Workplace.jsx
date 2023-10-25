@@ -1,5 +1,6 @@
 import "./Workplace.scss";
 import axios from "axios";
+import Cookies from 'js-cookie';
 import React, { useState, useEffect } from "react";
 
 const Workplace = () => {
@@ -11,8 +12,24 @@ const Workplace = () => {
   }, []);
 
   const getTeams = () => {
+    // Отримуємо токен з локального сховища (або іншого джерела)
+    const token = Cookies.get('auth_token')
+
+    // Переконайтеся, що токен був успішно отриманий
+    if (!token) {
+      console.error("Токен не був знайдений");
+      return;
+    }
+
+    // Встановлюємо заголовок "Authorization" із токеном
+    const config = {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    };
+
     axios
-      .get("http://127.0.0.1:8000/api/v1/teams/")
+      .get(`http://127.0.0.1:8000/api/v1/users/detail/1/`, config)
       .then((response) => {
         // Оновлюємо стан "teams" з отриманими даними з сервера
         setTeams(response.data);
