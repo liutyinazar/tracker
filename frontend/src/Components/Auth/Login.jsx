@@ -1,13 +1,15 @@
 import "./Auth.scss";
 import axios from "axios";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+// import axiosInstance from "../../axiosConfig";
 
 const Login = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
   // Створюємо стейт для збереження введених даних користувача
   const [formData, setFormData] = useState({
     username: "",
@@ -32,18 +34,19 @@ const Login = () => {
     };
 
     axios
-      .post("http://127.0.0.1:8000/auth/token/login/", credentials)
+      .post(`${BACKEND_HOST}/auth/token/login/`, credentials)
       .then((response) => {
         const token = response.data.auth_token;
-        Cookies.set('auth_token', token);
+        Cookies.set("auth_token", token);
         navigate("/profile");
         window.location.reload();
       })
       .catch((error) => {
         if (error.response && error.response.status === 400) {
-          setError("Неправильне ім'я користувача або пароль"); // Установка сообщения об ошибке
+          setError("Неправильне ім'я користувача або пароль");
         } else {
           console.error("Помилка:", error);
+          setError(`Server error`);
         }
       });
   };

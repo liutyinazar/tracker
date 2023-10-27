@@ -16,11 +16,12 @@ from api.views import (
     UserUpdate,
     UserDestroy,
     UserDetail,
+    UserTeamsList,
+    TeamTasksListView,
 )
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/v1/tasks/", TaskList.as_view()),
     path("api/v1/tasks/<int:pk>", TaskUpdate.as_view()),
     path("api/v1/tasks/delete/<int:pk>", TaskDestroy.as_view()),
     path("api/v1/users/", UserList.as_view()),
@@ -31,6 +32,10 @@ urlpatterns = [
     path("api/v1/teams/delete/<int:pk>", TeamDestroy.as_view()),
     path("api/v1/types/", TypeList.as_view()),
     path("api/v1/users/detail/<int:pk>/", UserDetail.as_view(), name="user-details"),
+    path(
+        "api/v1/users/<int:pk>/teams/", UserTeamsList.as_view(), name="user-teams-list"
+    ),
+    path("api/v1/teams/<int:pk>/tasks/", TeamTasksListView.as_view()),
     path("auth/", include("djoser.urls")),
     re_path(r"^auth/", include("djoser.urls.authtoken")),
 ]

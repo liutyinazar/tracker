@@ -14,6 +14,7 @@ const Sign = () => {
     email: "",
   });
   const token = Cookies.get('auth_token')
+  const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 
   if (token) {
     alert("Ви вже ввійшли в свій аккаунт!");
@@ -40,7 +41,7 @@ const Sign = () => {
     };
 
     axios
-      .post("http://127.0.0.1:8000/auth/users/", credentials)
+      .post(BACKEND_HOST + `/auth/users/`, credentials)
       .then((response) => {
         setError("Ви успішног створили аккаунт");
         navigate("/login");

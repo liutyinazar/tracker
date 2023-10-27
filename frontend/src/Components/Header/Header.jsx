@@ -1,15 +1,16 @@
 import "./Header.scss";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import logo from "../../assets/image/logo.png";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
+import axiosInstance from "../../axiosConfig";
 
 const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 
   useEffect(() => {
-    const token = Cookies.get('auth_token')
+    const token = Cookies.get("auth_token");
 
     if (token) {
       setIsAuthenticated(true);
@@ -19,25 +20,18 @@ const Header = () => {
   }, []);
 
   const handleLogout = () => {
-    const token = Cookies.get('auth_token')
+    // Відправляємо POST-запит на виход з передачею токену
+    axiosInstance
+      .post(BACKEND_HOST + "/auth/token/logout/")
+      .then((response) => {
+        // Видалення токена з куків
 
-    if (token) {
-      const headers = {
-        Authorization: `Token ${token}`,
-      };
-      // Відправляємо POST-запит на виход з передачею токену
-      axios
-        .post("http://127.0.0.1:8000/auth/token/logout/", null, { headers })
-        .then((response) => {
-          // Видалення токена з куків
-
-          Cookies.remove('auth_token');
-          setIsAuthenticated(false);
-        })
-        .catch((error) => {
-          console.error("Помилка при виході:", error);
-        });
-    }
+        Cookies.remove("auth_token");
+        setIsAuthenticated(false);
+      })
+      .catch((error) => {
+        console.error("Помилка при виході:", error);
+      });
   };
   return (
     <div className="header_border">
@@ -69,7 +63,7 @@ const Header = () => {
                 </li>
               ) : (
                 <li className="menu-item">
-                  <Link to="/login" className="auth_login">
+                  <Link to="/workplace" className="auth_login">
                     <a href="/" className="menu-link">
                       Workplace
                     </a>

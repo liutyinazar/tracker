@@ -16,6 +16,16 @@ class TaskList(generics.ListAPIView):
     serializer_class = TaskSerializer
 
 
+class TeamTasksListView(generics.ListAPIView):
+    serializer_class = TaskSerializer
+    # permission_classes = IsAuthenticated
+
+    def get_queryset(self):
+        team_id = self.kwargs["pk"]
+
+        return Task.objects.filter(by_team_id=team_id)
+
+
 class TaskUpdate(generics.RetrieveUpdateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -48,7 +58,6 @@ class UserUpdate(generics.RetrieveUpdateAPIView):
     # )
 
 
-
 class UserDestroy(generics.RetrieveDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -56,6 +65,20 @@ class UserDestroy(generics.RetrieveDestroyAPIView):
         IsAdminUser,
         IsOwner,
     )
+
+
+class UserTeamsList(generics.ListAPIView):
+    serializer_class = TeamSerializer
+    permission_classes = (
+        IsAdminUser,
+        IsOwner,
+    )
+
+    def get_queryset(self):
+        user_id = self.kwargs.get("pk")
+        # Знайдіть команди, до яких належить користувач
+        user_teams = Team.objects.filter(users=user_id)
+        return user_teams
 
 
 class UserDetail(generics.ListAPIView):
@@ -70,7 +93,6 @@ class UserDetail(generics.ListAPIView):
         user_id = self.kwargs.get("pk")
         queryset = User.objects.filter(pk=user_id)
         return queryset
-
 
 
 class TeamList(generics.ListAPIView):

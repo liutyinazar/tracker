@@ -9,31 +9,52 @@
             letter-spacing: 0.2px;
         }
     }
-    .workplace-wrapper {
-        border: 1px rgb(255, 255, 255) solid;
-        display: flex;
-        justify-content: space-between;
 
-        .workplace-type {
-            border-right: 1px blue solid;
-            li {
-                padding: 20px;
-                display: flex;
-                align-items: center;
+    .workplace-wrapper {
+        display: flex;
+        .task_wrapper {
+            padding-left: 20px;
+
+            h1 {
+                font-size: 22px;
+            }
+        }
+        .teams_wrapper {
+            width: 200px;
+            // padding-right: 80px;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+
+            .team {
                 cursor: pointer;
+                &.selected {
+                    .team-name {
+                        color: #4452fe;
+                    }
+                }
             }
-            h2 {
-                display: flex;
-                text-align: center;
-                padding-left: 20px;
-                font-weight: bold;
+
+            h1 {
+                font-size: 22px;
             }
+
             img {
-                display: flex;
-                justify-content: center;
-                width: 50px;
-                height: 50px;
-                border-radius: 50px;
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+                object-position: center center;
+                border-radius: 50%;
+            }
+
+            .team {
+                padding: 10px;
+
+                .team-name {
+                    text-align: center;
+                }
+                h2 {
+                    padding: 10px 0;
+                }
             }
         }
     }

@@ -1,13 +1,14 @@
 import "./Profile.scss";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import loading from "../../assets/gif/loading.gif";
 
 const Profile = () => {
-  const TOKEN = Cookies.get('auth_token')
+  const TOKEN = Cookies.get("auth_token");
   const [userData, setUserData] = useState(null);
   const [editProfile, setEditProfile] = useState(true);
+  const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
   // const navigate = useNavigate();
 
   const [formData, setFormData] = useState({});
@@ -31,7 +32,7 @@ const Profile = () => {
     // Выполнить GET-запрос при монтировании компонента
 
     axios
-      .get("http://127.0.0.1:8000/auth/users/me/", {
+      .get(`${BACKEND_HOST}/auth/users/me/`, {
         headers: {
           Authorization: `Token ${TOKEN}`,
         },
@@ -41,7 +42,7 @@ const Profile = () => {
 
         // Здійснюємо запит для userData після успішного отримання userId
         axios
-          .get(`http://127.0.0.1:8000/api/v1/users/${response.data.id}`)
+          .get(`${BACKEND_HOST}/api/v1/users/${response.data.id}`)
           .then((userDataResponse) => {
             // Сохранить полученные данные userData в стані
             setUserData(userDataResponse.data);
@@ -52,7 +53,7 @@ const Profile = () => {
         // localStorage.removeItem("auth_token");
         // window.location.reload();
       });
-  }, [TOKEN]);
+  }, [TOKEN, BACKEND_HOST]);
 
   const changeEditProfile = () => {
     setEditProfile(false);
@@ -71,7 +72,7 @@ const Profile = () => {
 
     if (Object.keys(requestData).length > 0) {
       axios
-        .patch(`http://127.0.0.1:8000/api/v1/users/${userData.id}`, requestData)
+        .patch(`${process.env.URL}/api/v1/users/${userData.id}`, requestData)
         .then((response) => {
           setEditProfile(true);
           window.location.reload();
@@ -87,7 +88,7 @@ const Profile = () => {
       return;
     }
     axios
-      .patch(`http://127.0.0.1:8000/api/v1/users/${userData.id}`, formData)
+      .patch(`${process.env.URL}/api/v1/users/${userData.id}`, formData)
       .then((response) => {
         setEditProfile(true);
       })

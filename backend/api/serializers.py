@@ -88,3 +88,4 @@ class TaskSerializer(serializers.ModelSerializer):
             "by_team",
             "for_users",
         )
+
