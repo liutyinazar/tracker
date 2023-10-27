@@ -52,10 +52,10 @@ class UserList(generics.ListAPIView):
 class UserUpdate(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
-    # permission_classes = (
-    #     IsAdminUser,
-    #     IsOwner,
-    # )
+    permission_classes = (
+        IsAdminUser,
+        IsOwner,
+    )
 
 
 class UserDestroy(generics.RetrieveDestroyAPIView):

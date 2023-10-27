@@ -1,8 +1,6 @@
 import "./Workplace.scss";
-import axios from "axios";
-import Cookies from "js-cookie";
-import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../axiosConfig";
+import React, { useState, useEffect } from "react";
 
 const Workplace = () => {
   const [teams, setTeams] = useState([]);
@@ -10,41 +8,31 @@ const Workplace = () => {
   const [selectedTeam, setSelectedTeam] = useState(null);
   const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 
-  const getTeams = useCallback(() => {
-    axiosInstance.get(`${BACKEND_HOST}/auth/users/me/`).then((response) => {
-      axiosInstance
-        .get(`${BACKEND_HOST}/api/v1/users/${response.data.id}/teams/`)
-        .then((response) => {
-          setTeams(response.data);
-        })
-        .catch((error) => {
-          console.error("Помилка отримання даних:", error);
-        });
-    });
-  }, [BACKEND_HOST]);
-
   useEffect(() => {
-    getTeams();
-  }, [getTeams]);
-
-  const selectTask = (teamId) => {
-    setSelectedTeam(teamId);
-    const token = Cookies.get("auth_token");
-    const config = {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
+    const fetchUserData = async () => {
+      try {
+        const userResponse = await axiosInstance.get(`${BACKEND_HOST}/auth/users/me/`);
+        const user = userResponse.data;
+        const teamsResponse = await axiosInstance.get(`${BACKEND_HOST}/api/v1/users/${user.id}/teams/`);
+        setTeams(teamsResponse.data);
+      } catch (error) {
+        console.error("Помилка отримання даних користувача:", error);
+      }
     };
-
-    axios
-      .get(`${BACKEND_HOST}/api/v1/teams/${teamId}/tasks/`, config)
-      .then((response) => {
-        setTasks(response.data);
-      })
-      .catch((error) => {
-        console.error("Помилка отримання даних:", error);
-      });
-  };
+  
+    fetchUserData();
+  }, [BACKEND_HOST]);
+  
+  const selectTask = async (teamId) => {
+    setSelectedTeam(teamId);
+    try {
+      const taskResponse = await axiosInstance.get(`${BACKEND_HOST}/api/v1/teams/${teamId}/tasks/`);
+      const tasks = taskResponse.data;
+      setTasks(tasks);
+    } catch (error) {
+      console.error("Помилка отримання даних:", error);
+    }
+  }
 
   return (
     <div className="container">

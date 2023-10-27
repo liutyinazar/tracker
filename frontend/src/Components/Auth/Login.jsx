@@ -1,20 +1,47 @@
 import "./Auth.scss";
-import axios from "axios";
 import Cookies from "js-cookie";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-// import axiosInstance from "../../axiosConfig";
+import axiosInstance from "../../axiosConfig";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
   const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
-  // Створюємо стейт для збереження введених даних користувача
+  const [error, setError] = useState("");
+
+  // Формуємо данні в state
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const credentials = {
+        username: formData.username,
+        password: formData.password,
+      };
+
+      const response = await axiosInstance.post(
+        `${BACKEND_HOST}/auth/token/login/`,
+        credentials
+      );
+      const token = response.data.auth_token;
+      Cookies.set("auth_token", token);
+      navigate("/profile");
+      window.location.reload();
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setError("Неправильне ім'я користувача або пароль");
+      } else {
+        console.error("Помилка:", error);
+        setError("Помилка сервера");
+      }
+    }
+  };
 
   // Обробник зміни значень полів вводу
   const handleInputChange = (e) => {
@@ -25,31 +52,6 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const credentials = {
-      username: formData.username,
-      password: formData.password,
-    };
-
-    axios
-      .post(`${BACKEND_HOST}/auth/token/login/`, credentials)
-      .then((response) => {
-        const token = response.data.auth_token;
-        Cookies.set("auth_token", token);
-        navigate("/profile");
-        window.location.reload();
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 400) {
-          setError("Неправильне ім'я користувача або пароль");
-        } else {
-          console.error("Помилка:", error);
-          setError(`Server error`);
-        }
-      });
-  };
   return (
     <div className="container">
       <div className="auth">
