@@ -1,5 +1,6 @@
 .workplace {
-    padding: 90px 0;
+    padding: 20px 0;
+    height: 100vh;
 
     .workplace-title {
         text-align: center;
@@ -20,13 +21,25 @@
             }
         }
         .teams_wrapper {
-            width: 200px;
+            width: 100px;
             border-right: 1px solid rgba(255, 255, 255, 0.05);
             text-align: center;
 
             .team {
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 cursor: pointer;
                 &.selected {
+                    position: relative;
+                    span {
+                        border-left: 4px solid #F2F3F5;
+                        position: absolute;
+                        top: auto;
+                        left: 0;
+                        height: 40px;
+                    }
+
                     .team-name {
                         color: #4452fe;
                     }
@@ -38,8 +51,8 @@
             }
 
             img {
-                width: 100px;
-                height: 100px;
+                width: 58px;
+                height: 58px;
                 object-fit: cover;
                 object-position: center center;
                 border-radius: 50%;

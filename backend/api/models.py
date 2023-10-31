@@ -2,6 +2,9 @@ import random, string
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 class Type(models.Model):
     type = models.CharField(max_length=128)
@@ -66,3 +69,15 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    task = models.ForeignKey(
+        Task, on_delete=models.CASCADE
+    )
+    message = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username}: {self.message}"

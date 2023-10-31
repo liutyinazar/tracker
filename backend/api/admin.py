@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Task, User, Team, Type
+from .models import Task, User, Team, Type, Notification
 
 admin.site.register(Task)
 admin.site.register(User)
@@ -11,3 +11,4 @@ class TeamAdmin(admin.ModelAdmin):
 
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Type)
+admin.site.register(Notification)

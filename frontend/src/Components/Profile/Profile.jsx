@@ -30,6 +30,7 @@ const Profile = () => {
       .get(`${BACKEND_HOST}/auth/users/me/`, )
       .then((response) => {
         // Сохранить полученные данные в состоянии
+        console.log(response.data.id);
 
         // Здійснюємо запит для userData після успішного отримання userId
         axiosInstance

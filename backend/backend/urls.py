@@ -18,6 +18,8 @@ from api.views import (
     UserDetail,
     UserTeamsList,
     TeamTasksListView,
+    UserNotificationListView,
+    UserNotificationViewDestroy,
 )
 
 urlpatterns = [
@@ -36,6 +38,12 @@ urlpatterns = [
         "api/v1/users/<int:pk>/teams/", UserTeamsList.as_view(), name="user-teams-list"
     ),
     path("api/v1/teams/<int:pk>/tasks/", TeamTasksListView.as_view()),
+    path("api/v1/users/<int:pk>/notifications/", UserNotificationListView.as_view()),
+    path(
+        "api/v1/users/<int:pk>/notifications/<int:notification_id>/delete/",
+        UserNotificationViewDestroy.as_view(),
+        name="delete-user-notification",
+    ),
     path("auth/", include("djoser.urls")),
     re_path(r"^auth/", include("djoser.urls.authtoken")),
 ]

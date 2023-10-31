@@ -1,13 +1,16 @@
+from rest_framework import status
+from rest_framework.response import Response
 from .permissions import IsOwner
-from .models import Task, User, Team, Type
+from .models import Task, User, Team, Type, Notification
 from rest_framework import generics
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser
 from .serializers import (
     TaskSerializer,
     UserSerializer,
     TeamSerializer,
     TypeSerializer,
     UserUpdateSerializer,
+    NotificationSerializer,
 )
 
 
@@ -18,7 +21,10 @@ class TaskList(generics.ListAPIView):
 
 class TeamTasksListView(generics.ListAPIView):
     serializer_class = TaskSerializer
-    # permission_classes = IsAuthenticated
+    permission_classes = (
+        IsAdminUser,
+        IsOwner,
+    )
 
     def get_queryset(self):
         team_id = self.kwargs["pk"]
@@ -26,6 +32,25 @@ class TeamTasksListView(generics.ListAPIView):
         return Task.objects.filter(by_team_id=team_id)
 
 
+class UserNotificationListView(generics.ListAPIView):
+    serializer_class = NotificationSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs["pk"]
+        return Notification.objects.filter(user_id=user_id)
+    
+class UserNotificationViewDestroy(generics.DestroyAPIView):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            notification = self.get_object()
+            notification.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Notification.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    
 class TaskUpdate(generics.RetrieveUpdateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -52,10 +77,10 @@ class UserList(generics.ListAPIView):
 class UserUpdate(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
-    permission_classes = (
-        IsAdminUser,
-        IsOwner,
-    )
+    # permission_classes = (
+    #     IsAdminUser,
+    #     IsOwner,
+    # )
 
 
 class UserDestroy(generics.RetrieveDestroyAPIView):
@@ -122,3 +147,7 @@ class TeamDestroy(generics.RetrieveDestroyAPIView):
 class TypeList(generics.ListAPIView):
     queryset = Type.objects.all()
     serializer_class = TypeSerializer
+    permission_classes = (
+        IsAdminUser,
+        IsOwner,
+    )

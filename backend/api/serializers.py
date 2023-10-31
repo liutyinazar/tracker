@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Task, User, Team, Type
+from .models import Task, User, Team, Type, Notification
 import re
 
 
@@ -89,3 +89,10 @@ class TaskSerializer(serializers.ModelSerializer):
             "for_users",
         )
 
+
+class NotificationSerializer(serializers.ModelSerializer):
+    created_at = serializers.DateTimeField(format="%d.%m.%y %H:%M")
+
+    class Meta:
+        model = Notification
+        fields = ("message", "task", "user", "created_at")

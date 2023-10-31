@@ -11,56 +11,69 @@ const Workplace = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userResponse = await axiosInstance.get(`${BACKEND_HOST}/auth/users/me/`);
+        const userResponse = await axiosInstance.get(
+          `${BACKEND_HOST}/auth/users/me/`
+        );
         const user = userResponse.data;
-        const teamsResponse = await axiosInstance.get(`${BACKEND_HOST}/api/v1/users/${user.id}/teams/`);
+        const teamsResponse = await axiosInstance.get(
+          `${BACKEND_HOST}/api/v1/users/${user.id}/teams/`
+        );
         setTeams(teamsResponse.data);
       } catch (error) {
         console.error("Помилка отримання даних користувача:", error);
       }
     };
-  
+
     fetchUserData();
   }, [BACKEND_HOST]);
-  
+
   const selectTask = async (teamId) => {
     setSelectedTeam(teamId);
     try {
-      const taskResponse = await axiosInstance.get(`${BACKEND_HOST}/api/v1/teams/${teamId}/tasks/`);
+      const taskResponse = await axiosInstance.get(
+        `${BACKEND_HOST}/api/v1/teams/${teamId}/tasks/`
+      );
       const tasks = taskResponse.data;
       setTasks(tasks);
     } catch (error) {
       console.error("Помилка отримання даних:", error);
     }
-  }
+  };
 
   return (
-    <div className="container">
+    // <div className="container">
       <div className="workplace">
-        <div className="workplace-title">
+        {/* <div className="workplace-title">
           <h1>Your Workplace</h1>
-        </div>
+        </div> */}
         <div className="workplace-wrapper">
           <div className="teams_wrapper">
-            <h1>Teams</h1>
+            {/* <h1>Teams</h1> */}
             <ul>
-              {teams.map((team) => (
-                <li
-                  key={team.id}
-                  className={`team ${
-                    team.id === selectedTeam ? "selected" : ""
-                  }`}
-                >
-                  {team.image && (
-                    <img
-                      src={team.image}
-                      alt={team.name}
-                      onClick={() => selectTask(team.id)}
-                    />
-                  )}
-                  <h2 className="team-name">{team.name}</h2>
+              {teams.length > 0 ? (
+                teams.map((team) => (
+                  <li
+                    key={team.id}
+                    className={`team ${
+                      team.id === selectedTeam ? "selected" : ""
+                    }`}
+                  >
+                    <span></span>
+                    {team.image && (
+                      <img
+                        src={team.image}
+                        alt={team.name}
+                        onClick={() => selectTask(team.id)}
+                      />
+                    )}
+                    {/* <h2 className="team-name">{team.name}</h2> */}
+                  </li>
+                ))
+              ) : (
+                <li className="no-teams-message">
+                  Нажаль, ви ще не долучились до жодної команди
                 </li>
-              ))}
+              )}
             </ul>
           </div>
           <div className="task_wrapper">
@@ -80,7 +93,7 @@ const Workplace = () => {
           </div>
         </div>
       </div>
-    </div>
+    // </div>
   );
 };
 
