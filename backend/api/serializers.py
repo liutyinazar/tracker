@@ -13,6 +13,12 @@ class TeamSerializer(serializers.ModelSerializer):
         fields = ("id", "identifier", "name", "image", "users")
 
 
+class UserImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["photo"]
+
+
 class UserSerializer(serializers.ModelSerializer):
     teams = TeamSerializer(many=True, read_only=True, source="team_set")
 

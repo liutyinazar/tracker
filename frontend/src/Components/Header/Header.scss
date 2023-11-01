@@ -1,3 +1,10 @@
+@font-face {
+    font-family: "Bahnschrift";
+    src: url("../../assets/fonts/Bahnschrift.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}
+
 .header_border {
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
@@ -9,6 +16,18 @@
 
         .logo {
             cursor: pointer;
+
+            // img {
+            //     width: 150px;
+            //     height: 150px;
+            // }
+            a {
+                font-family: Bahnschrift;
+                letter-spacing: 3px;
+                font-size: 18px;
+                display: flex;
+                align-items: center;
+            }
         }
 
         .menu {
@@ -23,6 +42,14 @@
             display: flex;
             gap: 20px;
             align-items: center;
+
+            .header-profile {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                object-fit: cover;
+                object-position: center center;
+            }
 
             .modal {
                 display: flex;
@@ -53,14 +80,19 @@
 
             .auth_login {
                 all: unset;
+                cursor: pointer;
+            }
+
+            .auth_login2 {
+                all: unset;
                 padding: 13.5px 46px;
                 border: 1px solid #fff;
+                cursor: pointer;
 
                 &:hover {
                     background-color: #fff;
                     color: #000;
                     border: 1px solid #000;
-                    cursor: pointer;
                 }
             }
         }

@@ -9,6 +9,7 @@ const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [editProfile, setEditProfile] = useState(true);
   const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
+  const [teams, setTeams] = useState([]);
 
   const [formData, setFormData] = useState({});
 
@@ -27,7 +28,7 @@ const Profile = () => {
 
   useEffect(() => {
     axiosInstance
-      .get(`${BACKEND_HOST}/auth/users/me/`, )
+      .get(`${BACKEND_HOST}/auth/users/me/`)
       .then((response) => {
         // Сохранить полученные данные в состоянии
         console.log(response.data.id);
@@ -45,6 +46,23 @@ const Profile = () => {
         // localStorage.removeItem("auth_token");
         // window.location.reload();
       });
+
+    const fetchUserData = async () => {
+      try {
+        const userResponse = await axiosInstance.get(
+          `${BACKEND_HOST}/auth/users/me/`
+        );
+        const user = userResponse.data;
+        const teamsResponse = await axiosInstance.get(
+          `${BACKEND_HOST}/api/v1/users/${user.id}/teams/`
+        );
+        setTeams(teamsResponse.data);
+      } catch (error) {
+        console.error("Помилка отримання даних користувача:", error);
+      }
+    };
+
+    fetchUserData();
   }, [TOKEN, BACKEND_HOST]);
 
   const changeEditProfile = () => {
@@ -53,6 +71,36 @@ const Profile = () => {
 
   const back = () => {
     setEditProfile(true);
+  };
+
+  const changeUserPhoto = () => {
+    const inputElement = document.createElement("input");
+    inputElement.type = "file";
+    inputElement.accept = "image/*";
+    inputElement.onchange = (e) => {
+      const file = e.target.files[0];
+  
+      if (file) {
+        const formData = new FormData();
+        formData.append("photo", file);
+  
+        axiosInstance
+          .put(`${BACKEND_HOST}/api/v1/update_photo/`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((response) => {
+            // Обновить отображение фотографии пользователя или выполнить другие действия при успешном обновлении
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.error("Error change userPhoto:", error);
+          });
+      }
+    };
+  
+    inputElement.click();
   };
 
   const editProfileSend = () => {
@@ -80,7 +128,7 @@ const Profile = () => {
       return;
     }
     axiosInstance
-      .patch(`${process.env.URL}/api/v1/users/${userData.id}`, formData)
+      .patch(BACKEND_HOST + `/api/v1/users/${userData.id}`, formData)
       .then((response) => {
         setEditProfile(true);
       })
@@ -100,7 +148,10 @@ const Profile = () => {
               <>
                 <div className="profile_data">
                   <div className="profile_image">
-                    <img src={userData.photo} alt="user" />
+                    <div className="profile_image_wrapper" onClick={changeUserPhoto}>
+                      <img src={userData.photo} alt="user" />
+                      <h5>Change Photo</h5>
+                    </div>
                     <div className="profile_text">
                       <h1>
                         {userData.first_name} {userData.last_name}
@@ -114,6 +165,19 @@ const Profile = () => {
                         Edit profile
                       </button>
                     </div>
+                  </div>
+                  <div className="profile_team">
+                    {teams.length > 0 ? (
+                      <ul>
+                        {teams.map((team) => (
+                          <li key={team.id}>
+                            <img src={team.image} alt="" />
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>You are not a member of any teams.</p>
+                    )}
                   </div>
                 </div>
               </>

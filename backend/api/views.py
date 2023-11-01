@@ -4,6 +4,7 @@ from .permissions import IsOwner
 from .models import Task, User, Team, Type, Notification
 from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
+from rest_framework.views import APIView
 from .serializers import (
     TaskSerializer,
     UserSerializer,
@@ -11,7 +12,27 @@ from .serializers import (
     TypeSerializer,
     UserUpdateSerializer,
     NotificationSerializer,
+    UserImageSerializer,
 )
+from rest_framework.parsers import MultiPartParser, FormParser
+
+
+class UserPhotoUpdate(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def put(self, request, format=None):
+        user = request.user  # Получить текущего пользователя
+
+        # Проверить, существует ли поле 'photo' в запросе
+        if 'photo' in request.data:
+            user.photo = request.data['photo']
+
+            # Сохранить обновленную фотографию пользователя
+            user.save()
+
+            return Response({'detail': 'Фотография пользователя успешно обновлена'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'Поле "photo" не найдено в запросе'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TaskList(generics.ListAPIView):
@@ -38,7 +59,8 @@ class UserNotificationListView(generics.ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs["pk"]
         return Notification.objects.filter(user_id=user_id)
-    
+
+
 class UserNotificationViewDestroy(generics.DestroyAPIView):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
@@ -50,7 +72,8 @@ class UserNotificationViewDestroy(generics.DestroyAPIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Notification.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-    
+
+
 class TaskUpdate(generics.RetrieveUpdateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -72,6 +95,12 @@ class TaskDestroy(generics.RetrieveDestroyAPIView):
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class UserPhoto(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserImageSerializer
+    lookup_field = "pk"
 
 
 class UserUpdate(generics.RetrieveUpdateAPIView):

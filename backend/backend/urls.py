@@ -20,6 +20,8 @@ from api.views import (
     TeamTasksListView,
     UserNotificationListView,
     UserNotificationViewDestroy,
+    UserPhoto,
+    UserPhotoUpdate,
 )
 
 urlpatterns = [
@@ -39,6 +41,8 @@ urlpatterns = [
     ),
     path("api/v1/teams/<int:pk>/tasks/", TeamTasksListView.as_view()),
     path("api/v1/users/<int:pk>/notifications/", UserNotificationListView.as_view()),
+    path("api/v1/users/<int:pk>/photo/", UserPhoto.as_view()),
+    path("api/v1/update_photo/", UserPhotoUpdate.as_view(), name="user-photo-update"),
     path(
         "api/v1/users/<int:pk>/notifications/<int:notification_id>/delete/",
         UserNotificationViewDestroy.as_view(),

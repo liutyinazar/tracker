@@ -1,6 +1,6 @@
 import "./Header.scss";
 import { Link } from "react-router-dom";
-import logo from "../../assets/image/logo.png";
+import logo from "../../assets/icon/logo1.svg";
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
@@ -14,6 +14,7 @@ const Header = () => {
   const [notifications, setNotifications] = useState([]);
   const [userId, setUserId] = useState([]);
   const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
+  const [userImage, setUserImage] = useState([]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -39,6 +40,10 @@ const Header = () => {
         );
         const user = userResponse.data;
         console.log(user.id);
+        const userImage = await axiosInstance.get(
+          BACKEND_HOST + `/api/v1/users/${user.id}/photo/`
+        );
+        setUserImage(userImage.data.photo);
         setUserId(user.id);
       } catch (error) {
         console.error("Помилка отримання даних користувача:", error);
@@ -89,6 +94,7 @@ const Header = () => {
             <Link to="/" className="auth_login">
               <a href="/">
                 <img src={logo} alt="logo" />
+                <h1>SyncFlow</h1>
               </a>
             </Link>
           </div>
@@ -169,14 +175,15 @@ const Header = () => {
                   </Modal>
                 </div>
                 <Link to="/profile" className="auth_login">
-                  Profile
+                  {/* Profile */}
+                  <img src={userImage} alt="user"  className="header-profile"/>
                 </Link>
-                <Link to="/" className="auth_login" onClick={handleLogout}>
+                <Link to="/" className="auth_login2" onClick={handleLogout}>
                   Logout
                 </Link>
               </>
             ) : (
-              <Link to="/login" className="auth_login">
+              <Link to="/login" className="auth_login2">
                 Login
               </Link>
             )}

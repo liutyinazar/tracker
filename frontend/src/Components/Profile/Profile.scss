@@ -14,9 +14,55 @@
 .profile_wrapper {
     .profile_data {
         display: flex;
-        justify-content: space-between;
+        // justify-content: space-between;
         text-align: left;
+
+        .profile_team {
+            // display: flex;
+            padding-left: 40px;
+            img {
+                height: 100px;
+                width: 100px;
+                border-radius: 0;
+            }
+        }
         .profile_image {
+            border-right: 1px solid rgba($color: #ffffff, $alpha: .1);
+            padding-right: 40px;
+            .profile_image_wrapper {
+                position: relative;
+
+                h5 {
+                    display: none;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    display: none;
+                }
+
+                img {
+                    filter: brightness(1);
+                    transition: filter 0.5s;
+                }
+
+                &:hover {
+                    img {
+                        filter: brightness(0.5);
+                        transition: filter 0.5s;
+                        cursor: pointer;
+                    }
+                    h5 {
+                        position: absolute;
+                        top: 70%;
+                        left: 50%;
+                        display: flex;
+                        background-color: none;
+                        cursor: pointer;
+                    }
+                }
+            }
+
             .edit_profile {
                 padding: 18px 0;
                 display: flex;
@@ -95,7 +141,7 @@
         align-items: center;
         text-align: center;
         gap: 20px;
-        
+
         button {
             all: unset;
             padding: 10px 40px;

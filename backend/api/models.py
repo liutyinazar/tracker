@@ -35,7 +35,12 @@ class Team(models.Model):
 
 
 class User(AbstractUser):
-    photo = models.ImageField(upload_to="assets/user_photo", null=True, blank=True)
+    photo = models.ImageField(
+        upload_to="assets/user_photo",
+        null=True,
+        blank=True,
+        default="./assets/images/default_user.png",
+    )
     groups = models.ManyToManyField(Group, related_name="custom_user_groups")
     user_permissions = models.ManyToManyField(
         Permission, related_name="custom_user_permissions"
@@ -73,9 +78,7 @@ class Task(models.Model):
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    task = models.ForeignKey(
-        Task, on_delete=models.CASCADE
-    )
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
     message = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
 
