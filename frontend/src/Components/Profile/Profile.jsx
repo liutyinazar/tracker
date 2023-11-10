@@ -79,11 +79,11 @@ const Profile = () => {
     inputElement.accept = "image/*";
     inputElement.onchange = (e) => {
       const file = e.target.files[0];
-  
+
       if (file) {
         const formData = new FormData();
         formData.append("photo", file);
-  
+
         axiosInstance
           .put(`${BACKEND_HOST}/api/v1/update_photo/`, formData, {
             headers: {
@@ -99,7 +99,7 @@ const Profile = () => {
           });
       }
     };
-  
+
     inputElement.click();
   };
 
@@ -148,7 +148,10 @@ const Profile = () => {
               <>
                 <div className="profile_data">
                   <div className="profile_image">
-                    <div className="profile_image_wrapper" onClick={changeUserPhoto}>
+                    <div
+                      className="profile_image_wrapper"
+                      onClick={changeUserPhoto}
+                    >
                       <img src={userData.photo} alt="user" />
                       <h5>Change Photo</h5>
                     </div>
@@ -167,6 +170,7 @@ const Profile = () => {
                     </div>
                   </div>
                   <div className="profile_team">
+                    <h1>Your Teams</h1>
                     {teams.length > 0 ? (
                       <ul>
                         {teams.map((team) => (

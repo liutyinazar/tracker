@@ -14,21 +14,36 @@
 .profile_wrapper {
     .profile_data {
         display: flex;
-        // justify-content: space-between;
         text-align: left;
 
         .profile_team {
-            // display: flex;
             padding-left: 40px;
+            text-align: center;
+
+            h1 {
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+
+            ul {
+                display: flex;
+                gap: 20px;
+                align-items: center;
+
+            }
             img {
                 height: 100px;
                 width: 100px;
                 border-radius: 0;
+                margin-bottom: 0;
+                
             }
         }
         .profile_image {
-            border-right: 1px solid rgba($color: #ffffff, $alpha: .1);
+            border-right: 1px solid rgba($color: #ffffff, $alpha: 0.1);
             padding-right: 40px;
+
+
             .profile_image_wrapper {
                 position: relative;
 

@@ -2,10 +2,6 @@ import random, string
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
-
 class Type(models.Model):
     type = models.CharField(max_length=128)
 
@@ -50,6 +46,13 @@ class User(AbstractUser):
         return self.username
 
 
+class Chanel(models.Model):
+    title = models.CharField(max_length=58)
+
+    def __str__(self):
+        return self.title
+
+
 class Task(models.Model):
     title = models.CharField(max_length=128)
     description = models.TextField()
@@ -66,6 +69,7 @@ class Task(models.Model):
     )
     task_type = models.ForeignKey(Type, on_delete=models.SET_NULL, null=True)
     by_team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True)
+    chanel = models.ForeignKey(Chanel, on_delete=models.SET_NULL, null=True)
     for_users = models.ManyToManyField(
         User,
         blank=True,

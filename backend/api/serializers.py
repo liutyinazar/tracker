@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Task, User, Team, Type, Notification
+from .models import Task, User, Team, Type, Notification, Chanel
 import re
 
 
@@ -7,10 +7,22 @@ def is_valid_email(email):
     return re.match(r"^[\w\.-]+@[\w\.-]+$", email)
 
 
+class ChanelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chanel
+        fields = ("title",)
+
+
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
-        fields = ("id", "identifier", "name", "image", "users")
+        fields = (
+            "id",
+            "identifier",
+            "name",
+            "image",
+            "users",
+        )
 
 
 class UserImageSerializer(serializers.ModelSerializer):
@@ -80,6 +92,7 @@ class TaskSerializer(serializers.ModelSerializer):
     created_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
     by_team = TeamSerializer()
     for_users = UserSerializer(many=True)
+    chanel = ChanelSerializer()
 
     class Meta:
         model = Task
@@ -93,6 +106,7 @@ class TaskSerializer(serializers.ModelSerializer):
             "created_by",
             "by_team",
             "for_users",
+            "chanel",
         )
 
 
