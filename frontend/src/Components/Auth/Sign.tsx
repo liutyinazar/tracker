@@ -23,7 +23,7 @@ const Sign = () => {
   }
 
   // Обробник зміни значень полів вводу
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -32,7 +32,7 @@ const Sign = () => {
   };
 
   // Обробник відправки форми
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const credentials = {
       username: formData.username,

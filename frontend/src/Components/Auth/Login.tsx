@@ -16,7 +16,7 @@ const Login = () => {
     password: "",
   });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -33,7 +33,7 @@ const Login = () => {
       Cookies.set("auth_token", token);
       navigate("/profile");
       window.location.reload();
-    } catch (error) {
+    } catch (error: any) {
       if (error.response && error.response.status === 400) {
         setError("Неправильне ім'я користувача або пароль");
       } else {
@@ -44,7 +44,7 @@ const Login = () => {
   };
 
   // Обробник зміни значень полів вводу
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,

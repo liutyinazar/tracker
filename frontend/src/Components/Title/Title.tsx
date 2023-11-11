@@ -1,6 +1,6 @@
 import "./Title.scss";
 import { Link } from "react-router-dom";
-import screens from "../../assets/image/screens.png";
+const screens = require("../../assets/image/screens.png");
 
 const Title = () => {
   return (

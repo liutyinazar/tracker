@@ -1,20 +1,24 @@
 import "./Header.scss";
-import { Link } from "react-router-dom";
-import logo from "../../assets/icon/logo1.svg";
-import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
-import notifications_image from "../../assets/icon/notifications.svg";
 import Modal from "../Modals/Modal";
+import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
+
+const notifications_image =
+  require("../../assets/icon/notifications.svg").default;
+const logo = require("../../assets/icon/logo1.svg").default;
 
 const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState<
+    { message: string; created_at: string }[]
+  >([]);
   const [userId, setUserId] = useState([]);
   const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
-  const [userImage, setUserImage] = useState([]);
+  const [userImage, setUserImage] = useState<string | never[]>([]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -60,7 +64,7 @@ const Header = () => {
 
         // Підраховуємо кількість непрочитаних сповіщень
         const unreadCount = userNotifications.filter(
-          (notification) => !notification.read
+          (notification: any) => !notification.read
         ).length;
         setUnreadNotificationsCount(unreadCount);
       } catch (error) {
@@ -176,7 +180,11 @@ const Header = () => {
                 </div>
                 <Link to="/profile" className="auth_login">
                   {/* Profile */}
-                  <img src={userImage} alt="user"  className="header-profile"/>
+                  <img
+                    src={Array.isArray(userImage) ? "" : userImage}
+                    alt="user"
+                    className="header-profile"
+                  />
                 </Link>
                 <Link to="/" className="auth_login2" onClick={handleLogout}>
                   Logout

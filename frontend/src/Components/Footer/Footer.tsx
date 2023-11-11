@@ -1,9 +1,9 @@
 import "./Footer.scss";
-import point from "../../assets/icon/point.svg";
-import phone from "../../assets/icon/phone.svg";
-import twitter from "../../assets/icon/twitter.svg";
-import facebook from "../../assets/icon/facebook.svg";
-import linkedin from "../../assets/icon/linkedin.svg";
+const point = require("../../assets/icon/point.svg").default;
+const phone = require("../../assets/icon/phone.svg").default;
+const twitter = require("../../assets/icon/twitter.svg").default;
+const facebook = require("../../assets/icon/facebook.svg").default;
+const linkedin = require("../../assets/icon/linkedin.svg").default;
 
 const Footer = () => {
   return (
