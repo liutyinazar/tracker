@@ -12,7 +12,6 @@ from api.views import (
     TeamList,
     TeamUpdate,
     TeamDestroy,
-    TypeList,
     UserUpdate,
     UserDestroy,
     UserDetail,
@@ -22,25 +21,34 @@ from api.views import (
     UserNotificationViewDestroy,
     UserPhoto,
     UserPhotoUpdate,
+    UserNotificationUpdate,
+    TeamChanelListView,
 )
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+
     path("api/v1/tasks/<int:pk>", TaskUpdate.as_view()),
     path("api/v1/tasks/delete/<int:pk>", TaskDestroy.as_view()),
+
     path("api/v1/users/", UserList.as_view()),
     path("api/v1/users/<int:pk>", UserUpdate.as_view()),
     path("api/v1/users/delete/<int:pk>", UserDestroy.as_view()),
+    path("api/v1/users/detail/<int:pk>/", UserDetail.as_view(), name="user-details"),
+    
     path("api/v1/teams/", TeamList.as_view()),
     path("api/v1/teams/<int:pk>", TeamUpdate.as_view()),
     path("api/v1/teams/delete/<int:pk>", TeamDestroy.as_view()),
-    path("api/v1/types/", TypeList.as_view()),
-    path("api/v1/users/detail/<int:pk>/", UserDetail.as_view(), name="user-details"),
     path(
         "api/v1/users/<int:pk>/teams/", UserTeamsList.as_view(), name="user-teams-list"
     ),
     path("api/v1/teams/<int:pk>/tasks/", TeamTasksListView.as_view()),
+    path("api/v1/teams/<int:pk>/chanel/", TeamChanelListView.as_view()), # chanel
     path("api/v1/users/<int:pk>/notifications/", UserNotificationListView.as_view()),
+    path(
+        "api/v1/users/<int:pk>/notifications/<int:notification_pk>/update/",
+        UserNotificationUpdate.as_view(),
+    ),
     path("api/v1/users/<int:pk>/photo/", UserPhoto.as_view()),
     path("api/v1/update_photo/", UserPhotoUpdate.as_view(), name="user-photo-update"),
     path(

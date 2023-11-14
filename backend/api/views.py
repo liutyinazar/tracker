@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 from .permissions import IsOwner
-from .models import Task, User, Team, Type, Notification
+from .models import Task, User, Team, Notification
 from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.views import APIView
@@ -9,12 +9,13 @@ from .serializers import (
     TaskSerializer,
     UserSerializer,
     TeamSerializer,
-    TypeSerializer,
     UserUpdateSerializer,
     NotificationSerializer,
     UserImageSerializer,
+    ChanelSerializer,
 )
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.shortcuts import get_object_or_404
 
 
 class UserPhotoUpdate(APIView):
@@ -24,15 +25,21 @@ class UserPhotoUpdate(APIView):
         user = request.user  # Получить текущего пользователя
 
         # Проверить, существует ли поле 'photo' в запросе
-        if 'photo' in request.data:
-            user.photo = request.data['photo']
+        if "photo" in request.data:
+            user.photo = request.data["photo"]
 
             # Сохранить обновленную фотографию пользователя
             user.save()
 
-            return Response({'detail': 'Фотография пользователя успешно обновлена'}, status=status.HTTP_200_OK)
+            return Response(
+                {"detail": "Фотография пользователя успешно обновлена"},
+                status=status.HTTP_200_OK,
+            )
         else:
-            return Response({'detail': 'Поле "photo" не найдено в запросе'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": 'Поле "photo" не найдено в запросе'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 class TaskList(generics.ListAPIView):
@@ -55,15 +62,43 @@ class TeamTasksListView(generics.ListAPIView):
 
 class UserNotificationListView(generics.ListAPIView):
     serializer_class = NotificationSerializer
+    permission_classes = (
+        IsAdminUser,
+        IsOwner,
+    )
 
     def get_queryset(self):
         user_id = self.kwargs["pk"]
         return Notification.objects.filter(user_id=user_id)
 
 
+class TeamChanelListView(generics.ListAPIView):
+    serializer_class = ChanelSerializer
+
+    def get_queryset(self):
+        team = self.get_object()
+        return team.chanels.all() 
+
+    def get_object(self):
+        team_id = self.kwargs['pk']
+        return get_object_or_404(Team, identifier=team_id)
+
+class UserNotificationUpdate(generics.UpdateAPIView):
+    serializer_class = NotificationSerializer
+
+    def get_object(self):
+        user_id = self.kwargs["pk"]
+        notification_id = self.kwargs["notification_pk"]
+        return get_object_or_404(Notification, user_id=user_id, id=notification_id)
+
+
 class UserNotificationViewDestroy(generics.DestroyAPIView):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
+    permission_classes = (
+        IsAdminUser,
+        IsOwner,
+    )
 
     def destroy(self, request, *args, **kwargs):
         try:
@@ -95,21 +130,29 @@ class TaskDestroy(generics.RetrieveDestroyAPIView):
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (
+        IsAdminUser,
+        IsOwner,
+    )
 
 
 class UserPhoto(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserImageSerializer
+    permission_classes = (
+        IsAdminUser,
+        IsOwner,
+    )
     lookup_field = "pk"
 
 
 class UserUpdate(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
-    # permission_classes = (
-    #     IsAdminUser,
-    #     IsOwner,
-    # )
+    permission_classes = (
+        IsAdminUser,
+        IsOwner,
+    )
 
 
 class UserDestroy(generics.RetrieveDestroyAPIView):
@@ -173,10 +216,3 @@ class TeamDestroy(generics.RetrieveDestroyAPIView):
     )
 
 
-class TypeList(generics.ListAPIView):
-    queryset = Type.objects.all()
-    serializer_class = TypeSerializer
-    permission_classes = (
-        IsAdminUser,
-        IsOwner,
-    )

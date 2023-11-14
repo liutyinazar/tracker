@@ -2,11 +2,13 @@ import random, string
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 
-class Type(models.Model):
-    type = models.CharField(max_length=128)
+
+class Chanel(models.Model):
+    title = models.CharField(max_length=58)
+    team_id = models.ForeignKey("Team", on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.type
+        return self.title
 
 
 class Team(models.Model):
@@ -14,6 +16,11 @@ class Team(models.Model):
     name = models.CharField(max_length=80)
     image = models.ImageField(upload_to="assets/team_image", null=True, blank=True)
     users = models.ManyToManyField("User")
+    chanels = models.ManyToManyField(
+        Chanel,
+        blank=True,
+        related_name="team_chanel",
+    )
 
     def __str__(self):
         return self.name
@@ -46,13 +53,6 @@ class User(AbstractUser):
         return self.username
 
 
-class Chanel(models.Model):
-    title = models.CharField(max_length=58)
-
-    def __str__(self):
-        return self.title
-
-
 class Task(models.Model):
     title = models.CharField(max_length=128)
     description = models.TextField()
@@ -67,13 +67,15 @@ class Task(models.Model):
         default=1,
         related_name="who_create_task",
     )
-    task_type = models.ForeignKey(Type, on_delete=models.SET_NULL, null=True)
     by_team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True)
-    chanel = models.ForeignKey(Chanel, on_delete=models.SET_NULL, null=True)
     for_users = models.ManyToManyField(
         User,
         blank=True,
         related_name="for_users",
+    )
+    chanel = models.ForeignKey(
+        Chanel,
+        on_delete=models.CASCADE,
     )
 
     def __str__(self):
@@ -85,6 +87,7 @@ class Notification(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     message = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username}: {self.message}"

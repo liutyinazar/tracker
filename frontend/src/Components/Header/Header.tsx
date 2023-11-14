@@ -14,7 +14,7 @@ const Header = () => {
   const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notifications, setNotifications] = useState<
-    { message: string; created_at: string }[]
+    { id: number; message: string; created_at: string; is_read: boolean }[]
   >([]);
   const [userId, setUserId] = useState([]);
   const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
@@ -67,6 +67,7 @@ const Header = () => {
           (notification: any) => !notification.read
         ).length;
         setUnreadNotificationsCount(unreadCount);
+        
       } catch (error) {
         console.error("Помилка при отриманні повідомлень:", error);
       }
@@ -75,7 +76,6 @@ const Header = () => {
     fetchUserData();
     getNotification();
   }, [BACKEND_HOST, userId]);
-
   const handleLogout = () => {
     // Відправляємо POST-запит на виход з передачею токену
     axiosInstance
@@ -88,6 +88,24 @@ const Header = () => {
       .catch((error) => {
         console.error("Помилка при виході:", error);
       });
+  };
+
+  const handleNotificationClick = async (notificationId: number) => {
+    try {
+      // Відправляємо запит на сервер для оновлення статусу конкретного сповіщення
+      await axiosInstance.patch(
+        `${BACKEND_HOST}/api/v1/users/${userId}/notifications/${notificationId}/update/`,
+        { is_read: true }
+      );
+
+      // Оновлюємо стан компонента, щоб позначити конкретне сповіщення як прочитане
+      setUnreadNotificationsCount((prevCount) => Math.max(0, prevCount - 1));
+    } catch (error) {
+      console.error(
+        "Помилка при відзначенні сповіщення як прочитаного:",
+        error
+      );
+    }
   };
 
   return (
@@ -170,7 +188,13 @@ const Header = () => {
                         .slice()
                         .reverse()
                         .map((notification, index) => (
-                          <li key={index}>
+                          <li
+                            key={index}
+                            onClick={() =>
+                              handleNotificationClick(notification.id)
+                            }
+                            className={`notification-item ${notification.is_read ? 'read' : ''}`}
+                          >
                             <p>{notification.message}</p>
                             <p>{notification.created_at}</p>
                           </li>

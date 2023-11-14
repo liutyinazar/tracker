@@ -1,6 +1,6 @@
-from rest_framework import serializers
-from .models import Task, User, Team, Type, Notification, Chanel
 import re
+from rest_framework import serializers
+from .models import Task, User, Team, Notification, Chanel
 
 
 def is_valid_email(email):
@@ -10,7 +10,7 @@ def is_valid_email(email):
 class ChanelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chanel
-        fields = ("title",)
+        fields = "title"
 
 
 class TeamSerializer(serializers.ModelSerializer):
@@ -51,7 +51,6 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, attrs):
-        # Додайте логіку перевірки, наприклад, перевірку складності пароля або валідацію електронної пошти
         if not is_valid_email(attrs["email"]):
             raise serializers.ValidationError({"email": "Невірна пошта"})
 
@@ -82,17 +81,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         )
 
 
-class TypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Type
-        fields = ("id", "type")
-
-
 class TaskSerializer(serializers.ModelSerializer):
     created_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
     by_team = TeamSerializer()
     for_users = UserSerializer(many=True)
-    chanel = ChanelSerializer()
+    # chanel = ChanelSerializer(many=True)
 
     class Meta:
         model = Task
@@ -115,4 +108,4 @@ class NotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notification
-        fields = ("message", "task", "user", "created_at")
+        fields = ("id", "message", "task", "user", "created_at", "is_read")
