@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 from .permissions import IsOwner
-from .models import Task, User, Team, Notification
+from .models import Task, User, Team, Notification, Chanel
 from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.views import APIView
@@ -12,7 +12,8 @@ from .serializers import (
     UserUpdateSerializer,
     NotificationSerializer,
     UserImageSerializer,
-    ChanelSerializer,
+    TeamChanelsSerializer,
+    TaskChanelSerializer,
 )
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.shortcuts import get_object_or_404
@@ -73,15 +74,21 @@ class UserNotificationListView(generics.ListAPIView):
 
 
 class TeamChanelListView(generics.ListAPIView):
-    serializer_class = ChanelSerializer
+    serializer_class = TeamChanelsSerializer
 
     def get_queryset(self):
-        team = self.get_object()
-        return team.chanels.all() 
+        pk = self.kwargs['pk']
+        return Team.objects.filter(id=pk)
 
-    def get_object(self):
-        team_id = self.kwargs['pk']
-        return get_object_or_404(Team, identifier=team_id)
+
+class TeamChanelTaskListView(generics.ListAPIView):
+    serializer_class = TaskChanelSerializer
+
+    def get_queryset(self):
+        team_pk = self.kwargs["team_pk"]
+        channel_pk = self.kwargs["chanel_pk"]
+        return Task.objects.filter(team__pk=team_pk, chanel__pk=channel_pk)
+
 
 class UserNotificationUpdate(generics.UpdateAPIView):
     serializer_class = NotificationSerializer
@@ -214,5 +221,3 @@ class TeamDestroy(generics.RetrieveDestroyAPIView):
         IsAdminUser,
         IsOwner,
     )
-
-

@@ -10,10 +10,20 @@ def is_valid_email(email):
 class ChanelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chanel
-        fields = "title"
+        fields = "__all__"
+
+
+class TeamChanelsSerializer(serializers.ModelSerializer):
+    chanels = ChanelSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Team
+        fields = ["chanels"]
 
 
 class TeamSerializer(serializers.ModelSerializer):
+    chanels = ChanelSerializer(many=True)
+
     class Meta:
         model = Team
         fields = (
@@ -22,6 +32,7 @@ class TeamSerializer(serializers.ModelSerializer):
             "name",
             "image",
             "users",
+            "chanels",
         )
 
 
@@ -30,6 +41,40 @@ class UserImageSerializer(serializers.ModelSerializer):
         model = User
         fields = ["photo"]
 
+
+
+class UserTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+        )
+
+        read_only_fields = (
+            "username",
+            "photo",
+            "password",
+        )
+
+class TaskChanelSerializer(serializers.ModelSerializer):
+    created_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    for_users = UserTaskSerializer(many=True)
+
+    class Meta:
+        model = Task
+        fields = (
+            "title",
+            "description",
+            "date_created",
+            "date_start",
+            "date_finish",
+            "is_completed",
+            "created_by",
+            "for_users",
+        )
 
 class UserSerializer(serializers.ModelSerializer):
     teams = TeamSerializer(many=True, read_only=True, source="team_set")
@@ -81,9 +126,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         )
 
 
+
+
 class TaskSerializer(serializers.ModelSerializer):
     created_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    by_team = TeamSerializer()
+    team = TeamSerializer()
     for_users = UserSerializer(many=True)
     # chanel = ChanelSerializer(many=True)
 
@@ -97,7 +144,7 @@ class TaskSerializer(serializers.ModelSerializer):
             "date_finish",
             "is_completed",
             "created_by",
-            "by_team",
+            "team",
             "for_users",
             "chanel",
         )

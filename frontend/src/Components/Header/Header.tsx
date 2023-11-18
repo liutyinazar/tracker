@@ -1,5 +1,5 @@
 import "./Header.scss";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
 import Modal from "../Modals/Modal";
 import { Link } from "react-router-dom";
@@ -43,7 +43,6 @@ const Header = () => {
           `${BACKEND_HOST}/auth/users/me/`
         );
         const user = userResponse.data;
-        console.log(user.id);
         const userImage = await axiosInstance.get(
           BACKEND_HOST + `/api/v1/users/${user.id}/photo/`
         );

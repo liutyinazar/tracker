@@ -1,23 +1,26 @@
 import "./Workplace.scss";
 import axiosInstance from "../../axiosConfig";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const Workplace = () => {
+  const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
+  const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
+  // const [selectedChanel, setChanel] = useState<number | null>(null);
+
   const [teams, setTeams] = useState<
-    Array<{ id: number; name: string; image?: string }>
+    Array<{
+      id: number;
+      name: string;
+      image?: string;
+    }>
   >([]);
-  const [tasks, setTasks] = useState<
+
+  const [channels, setChannels] = useState<
     Array<{
       id: number;
       title: string;
-      chanel: string;
-      description: string;
-      date_start: string;
-      date_finish: string;
     }>
   >([]);
-  const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
-  const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -38,28 +41,26 @@ const Workplace = () => {
     fetchUserData();
   }, [BACKEND_HOST]);
 
-  const selectTask = async (teamId: number) => {
+  const selectTeam = async (teamId: number) => {
     setSelectedTeam(teamId);
+
     try {
-      const taskResponse = await axiosInstance.get(
-        `${BACKEND_HOST}/api/v1/teams/${teamId}/tasks/`
+      const channelResponse = await axiosInstance.get(
+        `${BACKEND_HOST}/api/v1/teams/${teamId}/chanel/`
       );
-      const tasks = taskResponse.data;
-      setTasks(tasks);
+      const channels = channelResponse.data[0].chanels;
+      setChannels(channels);
     } catch (error) {
       console.error("Помилка отримання даних:", error);
     }
   };
 
+
+
   return (
-    // <div className="container">
     <div className="workplace">
-      {/* <div className="workplace-title">
-          <h1>Your Workplace</h1>
-        </div> */}
       <div className="workplace-wrapper">
         <div className="teams_wrapper">
-          {/* <h1>Teams</h1> */}
           <ul>
             {teams.length > 0 ? (
               teams.map((team) => (
@@ -74,10 +75,9 @@ const Workplace = () => {
                     <img
                       src={team.image}
                       alt={team.name}
-                      onClick={() => selectTask(team.id)}
+                      onClick={() => selectTeam(team.id)}
                     />
                   )}
-                  {/* <h2 className="team-name">{team.name}</h2> */}
                 </li>
               ))
             ) : (
@@ -87,25 +87,23 @@ const Workplace = () => {
             )}
           </ul>
         </div>
-        <div className="task_wrapper">
-          <h1>Tasks</h1>
+        <div className="channel_wrapper">
           <ul>
-            {tasks.map((task) => (
-              <li key={task.id} className="task">
-                <h2 className="task-name">Title {task.title}</h2>
-                <p>Description {task.description}</p>
-                <p>Chanel {task.chanel}</p>
-                <h2>
-                  Date from {task.date_start}
-                  to {task.date_finish}
-                </h2>
+            {channels.length > 0 ? (
+              channels.map((channel) => (
+                <li key={channel.id} className="channel">
+                  <h2 className="channel-name">{channel.title}</h2>
+                </li>
+              ))
+            ) : (
+              <li className="no-teams-message">
+                Оберіть команду для доступу до каналів
               </li>
-            ))}
+            )}
           </ul>
         </div>
       </div>
     </div>
-    // </div>
   );
 };
 

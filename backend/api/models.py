@@ -5,7 +5,6 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 
 class Chanel(models.Model):
     title = models.CharField(max_length=58)
-    team_id = models.ForeignKey("Team", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -16,11 +15,7 @@ class Team(models.Model):
     name = models.CharField(max_length=80)
     image = models.ImageField(upload_to="assets/team_image", null=True, blank=True)
     users = models.ManyToManyField("User")
-    chanels = models.ManyToManyField(
-        Chanel,
-        blank=True,
-        related_name="team_chanel",
-    )
+    chanels = models.ManyToManyField(Chanel, blank=True, related_name="team_chanel")
 
     def __str__(self):
         return self.name
@@ -61,22 +56,17 @@ class Task(models.Model):
     date_finish = models.DateTimeField()
     is_completed = models.BooleanField(default=False)
     created_by = models.ForeignKey(
-        User,
+        "User",
         on_delete=models.SET_NULL,
         null=True,
         default=1,
-        related_name="who_create_task",
+        related_name="created_tasks",
     )
-    by_team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True)
+    team = models.ForeignKey("Team", on_delete=models.SET_NULL, null=True)
     for_users = models.ManyToManyField(
-        User,
-        blank=True,
-        related_name="for_users",
+        "User", blank=True, related_name="assigned_tasks"
     )
-    chanel = models.ForeignKey(
-        Chanel,
-        on_delete=models.CASCADE,
-    )
+    chanel = models.ForeignKey("Chanel", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
