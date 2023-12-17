@@ -11,6 +11,7 @@ const logo = require("../../assets/icon/logo1.svg").default;
 
 const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isTheme, setIsTheme] = useState(false);
   const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notifications, setNotifications] = useState<
@@ -30,12 +31,19 @@ const Header = () => {
 
   useEffect(() => {
     const token = Cookies.get("auth_token");
+    const theme = Cookies.get("theme");
 
     if (token) {
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
     }
+
+    // if (theme) {
+    //   setIsTheme(true);
+    // } else {
+    //   setIsTheme(false);
+    // }
 
     const fetchUserData = async () => {
       try {
@@ -66,7 +74,6 @@ const Header = () => {
           (notification: any) => !notification.read
         ).length;
         setUnreadNotificationsCount(unreadCount);
-        
       } catch (error) {
         console.error("Помилка при отриманні повідомлень:", error);
       }
@@ -89,6 +96,14 @@ const Header = () => {
       });
   };
 
+  const changeTheme = () => {
+    setIsTheme((prevTheme) => {
+      const newTheme = !prevTheme;
+      Cookies.set("theme", newTheme.toString());
+      return newTheme;
+    });
+  };
+  
   const handleNotificationClick = async (notificationId: number) => {
     try {
       // Відправляємо запит на сервер для оновлення статусу конкретного сповіщення
@@ -162,6 +177,13 @@ const Header = () => {
             </ul>
           </div>
           <div className="auth_btn">
+            <div className="theme">
+              {isTheme ? (
+                <h1 onClick={() => changeTheme()}>change to black</h1>
+              ) : (
+                <h1 onClick={() => changeTheme()}>change to light</h1>
+              )}
+            </div>
             {isAuthenticated ? (
               <>
                 <div className="notification">
@@ -192,7 +214,9 @@ const Header = () => {
                             onClick={() =>
                               handleNotificationClick(notification.id)
                             }
-                            className={`notification-item ${notification.is_read ? 'read' : ''}`}
+                            className={`notification-item ${
+                              notification.is_read ? "read" : ""
+                            }`}
                           >
                             <p>{notification.message}</p>
                             <p>{notification.created_at}</p>

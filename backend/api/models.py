@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
-class Chanel(models.Model):
+class Channel(models.Model):
     title = models.CharField(max_length=58)
 
     def __str__(self):
@@ -15,7 +15,7 @@ class Team(models.Model):
     name = models.CharField(max_length=80)
     image = models.ImageField(upload_to="assets/team_image", null=True, blank=True)
     users = models.ManyToManyField("User")
-    chanels = models.ManyToManyField(Chanel, blank=True, related_name="team_chanel")
+    channels = models.ManyToManyField(Channel, blank=True, related_name="team_channel")
 
     def __str__(self):
         return self.name
@@ -66,7 +66,7 @@ class Task(models.Model):
     for_users = models.ManyToManyField(
         "User", blank=True, related_name="assigned_tasks"
     )
-    chanel = models.ForeignKey("Chanel", on_delete=models.CASCADE)
+    channel = models.ForeignKey("Channel", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -78,6 +78,18 @@ class Notification(models.Model):
     message = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username}: {self.message}"
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
+    message = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username}: {self.message}"

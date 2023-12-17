@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Task, User, Team, Notification, Chanel
+from .models import Task, User, Team, Notification, Channel, Comment
 
 admin.site.register(Task)
 admin.site.register(User)
@@ -11,4 +11,5 @@ class TeamAdmin(admin.ModelAdmin):
 
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Notification)
-admin.site.register(Chanel)
+admin.site.register(Channel)
+admin.site.register(Comment)

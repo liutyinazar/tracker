@@ -35,7 +35,7 @@ const Profile = () => {
 
         // Здійснюємо запит для userData після успішного отримання userId
         axiosInstance
-          .get(`${BACKEND_HOST}/api/v1/users/${response.data.id}`)
+          .get(`${BACKEND_HOST}/api/v1/users/${response.data.id}/`)
           .then((userDataResponse) => {
             // Сохранить полученные данные userData в стані
             setUserData(userDataResponse.data);

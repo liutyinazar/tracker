@@ -1,5 +1,0 @@
-http://127.0.0.1:8000/api/v1/teams/<int:team_pk>/chanel/<int:chanel_pk>/ 
-- отримання таски з каналу
-
-http://127.0.0.1:8000/api/v1/teams/<int:pk>/chanel/ 
-- отримання каналів
