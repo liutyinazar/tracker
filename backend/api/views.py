@@ -60,6 +60,18 @@ class TeamTasksListView(generics.ListAPIView):
         team_id = self.kwargs["pk"]
 
         return Task.objects.filter(by_team_id=team_id)
+    
+
+class TeamCreateView(APIView):
+    def post(self, request, *args, **kwargs):
+        data = request.data.copy()  # Замінивши на просте копіювання
+        data["identifier"] = None  # Устанавливаем identifier в None, чтобы он был сгенерирован автоматически
+        serializer = TeamSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class UserNotificationListView(generics.ListAPIView):

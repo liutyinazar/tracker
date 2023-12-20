@@ -11,9 +11,9 @@ class Channel(models.Model):
 
 
 class Team(models.Model):
-    identifier = models.CharField(max_length=10, unique=True)
+    identifier = models.CharField(max_length=10, unique=True, blank=True, null=True)
     name = models.CharField(max_length=80)
-    image = models.ImageField(upload_to="assets/team_image", null=True, blank=True)
+    image = models.ImageField(upload_to="assets/team_image")
     users = models.ManyToManyField("User")
     channels = models.ManyToManyField(Channel, blank=True, related_name="team_channel")
 

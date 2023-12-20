@@ -1,11 +1,24 @@
+import axios from "axios";
 import "./Workplace.scss";
 import axiosInstance from "../../axiosConfig";
 import { useState, useEffect } from "react";
+import Modal from "./Team/Modal";
 
 const Workplace = () => {
   const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
   const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
   const [selectedChannel, setSelectedChannel] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [teamName, setTeamName] = useState("");
+  const [teamImage, setTeamImage] = useState<File | null>(null);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const [teams, setTeams] = useState<
     Array<{
@@ -44,7 +57,7 @@ const Workplace = () => {
         );
         setTeams(teamsResponse.data);
       } catch (error) {
-        console.error("Помилка отримання даних користувача:", error);
+        console.error("Error getting user data:", error);
       }
     };
 
@@ -64,7 +77,7 @@ const Workplace = () => {
 
       setChannels(channels);
     } catch (error) {
-      console.error("Помилка отримання даних:", error);
+      console.error("Error getting data:", error);
     }
   };
 
@@ -78,21 +91,95 @@ const Workplace = () => {
       const tasks = taskResponse.data;
       setTasks(tasks);
     } catch (error) {
-      console.error("Помилка отримання даних:", error);
+      console.error("Error getting data:", error);
     }
   };
 
-  const test = () => {
-    console.log('add team test');
-    
-  }
+  const handleTeamNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTeamName(e.target.value);
+  };
+
+  const handleTeamImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    setTeamImage(file || null);
+  };
+
+  const addTeam = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const userResponse = await axiosInstance.get(
+        `${BACKEND_HOST}/auth/users/me/`
+      );
+      const user = userResponse.data;
+
+      const formData = new FormData();
+      formData.append("name", teamName);
+      formData.append("users", user.id);
+      if (teamImage !== null) {
+        formData.append("image", teamImage);
+      }
+
+      const response = await axios.post(
+        `${BACKEND_HOST}/api/v1/teams/add/`,
+        formData
+      );
+
+      console.log("Відповідь від сервера:", response.data);
+      console.log(response);
+
+      if (response.status === 200 || response.status === 201) {
+        console.log("Team successfully added");
+        closeModal(); // Закриття модального вікна після додавання команди
+        window.location.reload();
+      } else {
+        console.error("Error adding command");
+        // Додатковий код для обробки помилки, якщо потрібно
+      }
+    } catch (error) {
+      console.error("Error sending request:", error);
+      // Додатковий код для обробки помилки, якщо потрібно
+    }
+  };
+
+  const openModals = () => {
+    openModal();
+  };
 
   return (
     <div className="workplace">
       <div className="workplace-wrapper">
         <div className="teams_wrapper">
-          <div className="add_team">
-            <h1 onClick={test}>+</h1>
+          <div className="add_team_wrapper">
+            <h1 onClick={openModals}>+</h1>
+            <div className={`add_team ${isModalOpen ? "open_modal" : ""}`}>
+              <Modal isOpen={isModalOpen} closeModal={closeModal}>
+                <form
+                  onSubmit={addTeam}
+                  className="add_team_form"
+                  encType="multipart/form-data"
+                >
+                  <label>
+                    Name:
+                    <input
+                      type="text"
+                      value={teamName}
+                      onChange={handleTeamNameChange}
+                      placeholder="Enter team name"
+                    />
+                  </label>
+                  <label>
+                    Image:
+                    <input
+                      type="file"
+                      accept="image/jpeg, image/png"
+                      onChange={handleTeamImageChange}
+                    />
+                  </label>
+                  <button type="submit">Create</button>
+                </form>
+              </Modal>
+            </div>
           </div>
           <ul>
             {teams.length > 0 ? (

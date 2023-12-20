@@ -31,19 +31,13 @@ const Header = () => {
 
   useEffect(() => {
     const token = Cookies.get("auth_token");
-    const theme = Cookies.get("theme");
+    // const theme = Cookies.get("theme");
 
     if (token) {
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
     }
-
-    // if (theme) {
-    //   setIsTheme(true);
-    // } else {
-    //   setIsTheme(false);
-    // }
 
     const fetchUserData = async () => {
       try {

@@ -22,7 +22,7 @@ class TeamChannelsSerializer(serializers.ModelSerializer):
 
 
 class TeamSerializer(serializers.ModelSerializer):
-    channels = ChannelSerializer(many=True)
+    channels = ChannelSerializer(many=True, required=False)
 
     class Meta:
         model = Team
@@ -34,6 +34,42 @@ class TeamSerializer(serializers.ModelSerializer):
             "users",
             "channels",
         )
+
+    def create(self, validated_data):
+        channels_data = validated_data.pop('channels', [])
+        users_data = validated_data.pop('users', [])  # Extract users data
+
+        team = Team.objects.create(**validated_data)
+
+        # Add users only if provided
+        if users_data:
+            team.users.set(users_data)
+
+        # Add channels only if provided
+        if channels_data:
+            team.channels.set(channels_data)
+
+        return team
+
+    def validate_channels(self, value):
+        return value
+
+    def validate_users(self, value):
+        if not value:
+            raise serializers.ValidationError("Список 'users' не может быть пустым.")
+        return value
+
+    def validate_identifier(self, value):
+        if value is not None:
+            raise serializers.ValidationError("Поле 'identifier' должно быть null.")
+        return value
+    
+    
+    def validate_image(self, value):
+        if not value:
+            raise serializers.ValidationError("Поле 'image' є обов'язковим.")
+        return value
+
 
 
 class UserImageSerializer(serializers.ModelSerializer):
