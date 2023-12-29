@@ -3,6 +3,7 @@ import "./Workplace.scss";
 import axiosInstance from "../../axiosConfig";
 import { useState, useEffect } from "react";
 import Modal from "./Team/Modal";
+// import plus from '../../assets/icon/plus.svg';
 
 const Workplace = () => {
   const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
@@ -208,6 +209,9 @@ const Workplace = () => {
           </ul>
         </div>
         <div className="channel_wrapper">
+          <div className="add_channel_wrapper">
+            <h1>+</h1>
+          </div>
           <ul>
             {channels.length > 0 ? (
               channels.map((channel) => (
