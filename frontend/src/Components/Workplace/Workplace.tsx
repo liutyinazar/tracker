@@ -4,6 +4,8 @@ import axiosInstance from "../../axiosConfig";
 import { useState, useEffect } from "react";
 import Modal from "./Team/Modal";
 // import plus from '../../assets/icon/plus.svg';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
 
 const Workplace = () => {
   const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
@@ -149,43 +151,51 @@ const Workplace = () => {
 
   return (
     <div className="workplace">
-      <div className="workplace-wrapper">
-        <div className="teams_wrapper">
-          <div className="add_team_wrapper">
-            <h1 onClick={openModals}>+</h1>
-            <div className={`add_team ${isModalOpen ? "open_modal" : ""}`}>
-              <Modal isOpen={isModalOpen} closeModal={closeModal}>
-                <form
-                  onSubmit={addTeam}
-                  className="add_team_form"
-                  encType="multipart/form-data"
-                >
-                  <label>
-                    Name:
-                    <input
-                      type="text"
-                      value={teamName}
-                      onChange={handleTeamNameChange}
-                      placeholder="Enter team name"
-                    />
-                  </label>
-                  <label>
-                    Image:
-                    <input
-                      type="file"
-                      accept="image/jpeg, image/png"
-                      onChange={handleTeamImageChange}
-                    />
-                  </label>
-                  <button type="submit">Create</button>
-                </form>
-              </Modal>
-            </div>
+      <div className="teams_wrapper">
+        <div className="add_team_wrapper">
+          <h1 onClick={openModals}>+</h1>
+          <div className={`add_team ${isModalOpen ? "open_modal" : ""}`}>
+            <Modal isOpen={isModalOpen} closeModal={closeModal}>
+              <form
+                onSubmit={addTeam}
+                className="add_team_form"
+                encType="multipart/form-data"
+              >
+                <label>
+                  Name:
+                  <input
+                    type="text"
+                    value={teamName}
+                    onChange={handleTeamNameChange}
+                    placeholder="Enter team name"
+                  />
+                </label>
+                <label>
+                  Image:
+                  <input
+                    type="file"
+                    accept="image/jpeg, image/png"
+                    onChange={handleTeamImageChange}
+                  />
+                </label>
+                <button type="submit">Create</button>
+              </form>
+            </Modal>
           </div>
+        </div>
+        <Swiper
+          slidesPerView={3}
+          spaceBetween={30}
+          pagination={{
+            clickable: true,
+          }}
+          modules={[Pagination]}
+          className="mySwiper"
+        >
           <ul>
             {teams.length > 0 ? (
               teams.map((team) => (
-                <li
+                <SwiperSlide
                   key={team.id}
                   className={`team ${
                     team.id === selectedTeam ? "selected" : ""
@@ -199,7 +209,7 @@ const Workplace = () => {
                       onClick={() => selectTeam(team.id)}
                     />
                   )}
-                </li>
+                </SwiperSlide>
               ))
             ) : (
               <li className="no-teams-message">
@@ -207,7 +217,9 @@ const Workplace = () => {
               </li>
             )}
           </ul>
-        </div>
+        </Swiper>
+      </div>
+      <div className="workplace-wrapper">
         <div className="channel_wrapper">
           <div className="add_channel_wrapper">
             <h1>+</h1>

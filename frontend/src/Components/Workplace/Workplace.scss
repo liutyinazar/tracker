@@ -2,9 +2,61 @@
     padding: 20px 0;
     height: 100vh;
 
+    .teams_wrapper {
+        .swiper {
+            display: flex;
+            
+        }
+
+        .team {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            &.selected {
+                position: relative;
+                span {
+                    border-left: 4px solid #f2f3f5;
+                    position: absolute;
+                    top: auto;
+                    left: 0;
+                    height: 40px;
+                }
+
+                .team-name {
+                    color: #4452fe;
+                }
+            }
+        }
+
+        h1 {
+            font-size: 22px;
+        }
+
+        img {
+            width: 58px;
+            height: 58px;
+            object-fit: cover;
+            object-position: center center;
+            border-radius: 50%;
+        }
+
+        .team {
+            padding: 10px;
+
+            .team-name {
+                text-align: center;
+            }
+            h2 {
+                padding: 10px 0;
+            }
+        }
+    }
     .workplace-wrapper {
         display: flex;
         height: 100vh;
+
+        
 
         .task_wrapper {
             padding: 10px;
@@ -37,55 +89,7 @@
                 font-size: 22px;
             }
         }
-        .teams_wrapper {
-            width: 100px;
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-
-            .team {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                &.selected {
-                    position: relative;
-                    span {
-                        border-left: 4px solid #f2f3f5;
-                        position: absolute;
-                        top: auto;
-                        left: 0;
-                        height: 40px;
-                    }
-
-                    .team-name {
-                        color: #4452fe;
-                    }
-                }
-            }
-
-            h1 {
-                font-size: 22px;
-            }
-
-            img {
-                width: 58px;
-                height: 58px;
-                object-fit: cover;
-                object-position: center center;
-                border-radius: 50%;
-            }
-
-            .team {
-                padding: 10px;
-
-                .team-name {
-                    text-align: center;
-                }
-                h2 {
-                    padding: 10px 0;
-                }
-            }
-        }
+        
     }
 }
 .add_team_wrapper {
